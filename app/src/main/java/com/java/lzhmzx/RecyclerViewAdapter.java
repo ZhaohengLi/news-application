@@ -1,6 +1,7 @@
 package com.java.lzhmzx;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,29 +53,38 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(RecyclerViewAdapter.NewsViewHolder newsViewHolder, int position){
-        newsViewHolder.newPicture.setImageResource(newsList.get(position).getPhotoId());
+    public void onBindViewHolder(RecyclerViewAdapter.NewsViewHolder newsViewHolder, final int position){
+        newsViewHolder.newPicture.setImageResource(newsList.get(position).getPictureId());
         newsViewHolder.newsTitle.setText(newsList.get(position).getTitle());
         newsViewHolder.newsDescription.setText(newsList.get(position).getDescription());
 
         newsViewHolder.cardView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                //TODO
+                Intent intent = new Intent(context, NewsActivity.class);
+                intent.putExtra("News", newsList.get(position));
+                context.startActivity(intent);
             }
         });
 
         newsViewHolder.readMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO
+                Intent intent = new Intent(context, NewsActivity.class);
+                intent.putExtra("News", newsList.get(position));
+                context.startActivity(intent);
             }
         });
 
         newsViewHolder.share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_SUBJECT, "分享");
+                intent.putExtra(Intent.EXTRA_TEXT, newsList.get(position).getDescription());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(Intent.createChooser(intent, newsList.get(position).getTitle()));
             }
         });
     }
