@@ -19,6 +19,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 import android.widget.ArrayAdapter;
@@ -34,16 +36,20 @@ public class MainActivity extends AppCompatActivity
 
     //设置TabLayout
     private TabLayout tabLayout;
-    private ListView listView;
+    private RecyclerView recyclerView;
+    private ArrayList<News> newsArrayList;
+    private RecyclerViewAdapter recyclerViewAdapter;
+    private LinearLayoutManager linearLayoutManager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setNewsData();
         init();
-        initTabLayout();
-        initListView();
+        setTabLayout();
+        setRecyclerView();
     }
 
     private void init(){
@@ -66,7 +72,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void initTabLayout(){
+    public void setTabLayout(){
         ArrayList<String> category = new ArrayList<>(Arrays.asList("娱乐","军事","教育","文化","健康","财经","体育","汽车","科技","社会"));
         tabLayout = findViewById(R.id.tab_layout);
         for(String cat : category){
@@ -85,18 +91,23 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void initListView(){
-        String[] data = {"Apple",
-                "Banana","Orange","Watermelon",
-                "Pear","Grape","Pineapple",
-                "Strawberry","Cherry","Mango","Apple",
-                "Banana","Orange","Watermelon",
-                "Pear","Grape","Pineapple",
-                "Strawberry","Cherry","Mango"};
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
-                MainActivity.this, android.R.layout.simple_list_item_1, data);
-        listView = findViewById(R.id.list_view);
-        listView.setAdapter(arrayAdapter);
+    public void setRecyclerView(){
+        linearLayoutManager = new LinearLayoutManager(MainActivity.this);
+        recyclerViewAdapter = new RecyclerViewAdapter(MainActivity.this, newsArrayList);
+
+        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+    }
+
+    public void setNewsData(){
+        newsArrayList = new ArrayList<>();
+        newsArrayList.add(new News(getString(R.string.news_one_title),getString(R.string.news_one_desc),R.mipmap.news_one));
+        newsArrayList.add(new News(getString(R.string.news_two_title),getString(R.string.news_two_desc),R.mipmap.news_two));
+        newsArrayList.add(new News(getString(R.string.news_three_title),getString(R.string.news_three_desc),R.mipmap.news_three));
+        newsArrayList.add(new News(getString(R.string.news_four_title),getString(R.string.news_four_desc),R.mipmap.news_four));
     }
 
     @Override
