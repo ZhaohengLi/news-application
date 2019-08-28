@@ -60,7 +60,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         newsViewHolder.cardView.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v){
+            public void onClick(View view){
                 Intent intent = new Intent(context, NewsActivity.class);
                 intent.putExtra("News", newsList.get(position));
                 context.startActivity(intent);
