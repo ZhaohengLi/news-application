@@ -21,6 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.lang.reflect.Array;
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity
 
     //设置TabLayout
     private TabLayout tabLayout;
+    private ListView listView;
 
 
     @Override
@@ -40,6 +43,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         init();
         initTabLayout();
+        initListView();
     }
 
     private void init(){
@@ -79,6 +83,20 @@ public class MainActivity extends AppCompatActivity
             public void onTabReselected(TabLayout.Tab tab) {}
         });
 
+    }
+
+    private void initListView(){
+        String[] data = {"Apple",
+                "Banana","Orange","Watermelon",
+                "Pear","Grape","Pineapple",
+                "Strawberry","Cherry","Mango","Apple",
+                "Banana","Orange","Watermelon",
+                "Pear","Grape","Pineapple",
+                "Strawberry","Cherry","Mango"};
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
+                MainActivity.this, android.R.layout.simple_list_item_1, data);
+        listView = findViewById(R.id.list_view);
+        listView.setAdapter(arrayAdapter);
     }
 
     @Override
