@@ -1,6 +1,8 @@
 package com.java.lzhmzx;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,10 +21,17 @@ import java.util.Collections;
 import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
-
+    //搜索相关
     private FloatingSearchView mSearchView;
     private ArrayList<HistorySuggestion> historySuggestionArrayList = new ArrayList<>();
     private String lastQuery = "";
+
+    //新闻列表相关
+    private ArrayList<News> newsArrayList = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private RecyclerViewAdapter recyclerViewAdapter;
+    private LinearLayoutManager linearLayoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +101,18 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void Search(String keyword){
-        ArrayList<News> newsArrayList = new ArrayList<>();
-        Toast.makeText(SearchActivity.this, keyword, Toast.LENGTH_SHORT).show();
+        newsArrayList.add(new News(getString(R.string.news_one_title),getString(R.string.news_one_desc),R.mipmap.news_one));
+        newsArrayList.add(new News(getString(R.string.news_two_title),getString(R.string.news_two_desc),R.mipmap.news_two));
+        newsArrayList.add(new News(getString(R.string.news_three_title),getString(R.string.news_three_desc),R.mipmap.news_three));
+        newsArrayList.add(new News(getString(R.string.news_four_title),getString(R.string.news_four_desc),R.mipmap.news_four));
+
+        linearLayoutManager = new LinearLayoutManager(SearchActivity.this);
+        recyclerViewAdapter = new RecyclerViewAdapter(SearchActivity.this, newsArrayList);
+
+        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
     }
 }
