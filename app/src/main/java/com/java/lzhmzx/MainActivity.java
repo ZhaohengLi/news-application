@@ -47,10 +47,10 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setNewsData();
+        setUpNewsData();
         init();
-        setTabLayout();
-        setRecyclerView();
+        setUpTabLayout();
+        setUpRecyclerView();
     }
 
     private void init(){
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    public void setTabLayout(){
+    public void setUpTabLayout(){
         ArrayList<String> category = new ArrayList<>(Arrays.asList("娱乐","军事","教育","文化","健康","财经","体育","汽车","科技","社会"));
         tabLayout = findViewById(R.id.tab_layout);
         for(String cat : category){
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void setRecyclerView(){
+    public void setUpRecyclerView(){
         linearLayoutManager = new LinearLayoutManager(MainActivity.this);
         recyclerViewAdapter = new RecyclerViewAdapter(MainActivity.this, newsArrayList);
 
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void setNewsData(){
+    public void setUpNewsData(){
         newsArrayList = new ArrayList<>();
         newsArrayList.add(new News(getString(R.string.news_one_title),getString(R.string.news_one_desc),R.mipmap.news_one));
         newsArrayList.add(new News(getString(R.string.news_two_title),getString(R.string.news_two_desc),R.mipmap.news_two));
@@ -159,10 +159,16 @@ public class MainActivity extends AppCompatActivity
 
             // Handle the camera action
         } else if (id == R.id.nav_favorite) {
+            Intent intent = new Intent(MainActivity.this, FavoriteActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_history) {
+            Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_recommend) {
+            Intent intent = new Intent(MainActivity.this, RecommendActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_share) {
 
