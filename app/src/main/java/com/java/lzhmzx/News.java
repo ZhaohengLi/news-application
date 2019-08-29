@@ -6,11 +6,13 @@ public class News implements Parcelable {
     private String title = "";
     private String description = "";
     private int pictureId = -1;
+    private Boolean isRead = false;
 
-    public News(String title, String description, int pictureId) {
+    public News(String title, String description, int pictureId, Boolean isRead) {
         this.title=title;
         this.description=description;
         this.pictureId=pictureId;
+        this.isRead=isRead;
     }
     public News(){}
 
@@ -37,6 +39,8 @@ public class News implements Parcelable {
     public String getTitle() {
         return title;
     }
+
+    public Boolean getIsRead() { return isRead; }
 
     @Override
     public int describeContents(){

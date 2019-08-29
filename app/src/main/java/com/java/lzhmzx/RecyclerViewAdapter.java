@@ -28,12 +28,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     static class NewsViewHolder extends RecyclerView.ViewHolder{
         CardView cardView;
-        ImageView newPicture;
+        ImageView newPicture, markedAsRead;
         TextView newsTitle, newsDescription;
         Button share, readMore;
 
         public NewsViewHolder(final View itemView){
             super(itemView);
+            markedAsRead = itemView.findViewById(R.id.marked_as_read);
             cardView = itemView.findViewById(R.id.card_view);
             newPicture = itemView.findViewById(R.id.news_picture);
             newsTitle = itemView.findViewById(R.id.news_title);
@@ -57,6 +58,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         newsViewHolder.newPicture.setImageResource(newsList.get(position).getPictureId());
         newsViewHolder.newsTitle.setText(newsList.get(position).getTitle());
         newsViewHolder.newsDescription.setText(newsList.get(position).getDescription());
+        if(!newsList.get(position).getIsRead()) newsViewHolder.markedAsRead.setVisibility(View.INVISIBLE);
 
         newsViewHolder.cardView.setOnClickListener(new View.OnClickListener(){
             @Override

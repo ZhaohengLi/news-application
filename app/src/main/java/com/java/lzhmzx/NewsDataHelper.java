@@ -95,10 +95,10 @@ public class NewsDataHelper {
 
     public static ArrayList<News> getDataExamples(){
         ArrayList<News> newsArrayList = new ArrayList<>();
-        newsArrayList.add(new News("Dallas police HQ attack: Suspect believed killed during standoff",text,R.mipmap.news_one));
-        newsArrayList.add(new News("Hugh Jackman says coffee can change the world",text,R.mipmap.news_two));
-        newsArrayList.add(new News("Australia in charge of second Test against West Indies in Jamaica",text,R.mipmap.news_three));
-        newsArrayList.add(new News("Sweden royal wedding","Australia in charge of second Test against West Indies in Jamaica",R.mipmap.news_four));
+        newsArrayList.add(new News("Dallas police HQ attack: Suspect believed killed during standoff",text,R.mipmap.news_one, false));
+        newsArrayList.add(new News("Hugh Jackman says coffee can change the world",text,R.mipmap.news_two,true));
+        newsArrayList.add(new News("Australia in charge of second Test against West Indies in Jamaica",text,R.mipmap.news_three,true));
+        newsArrayList.add(new News("Sweden royal wedding","Australia in charge of second Test against West Indies in Jamaica",R.mipmap.news_four,false));
         return newsArrayList;
     }
 }
