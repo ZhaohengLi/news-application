@@ -15,12 +15,14 @@ import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
 
     private FloatingSearchView mSearchView;
     private ArrayList<HistorySuggestion> historySuggestionArrayList = new ArrayList<>();
+    private String lastQuery = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,6 @@ public class SearchActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
         setHistorySuggestion();
-
         setUpFloatingSearchView();
     }
 
@@ -45,28 +46,38 @@ public class SearchActivity extends AppCompatActivity {
         mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
             @Override
             public void onSuggestionClicked(final SearchSuggestion searchSuggestion) {
-                Toast.makeText(SearchActivity.this, "Click Suggestion: "+searchSuggestion.getBody(), Toast.LENGTH_SHORT).show();
+                mSearchView.clearFocus();
+                if(!lastQuery.equals(searchSuggestion.getBody())){
+                    historySuggestionArrayList.remove(searchSuggestion);
+                    lastQuery = searchSuggestion.getBody();
+                    historySuggestionArrayList.add((HistorySuggestion) searchSuggestion);
+                }
+                mSearchView.setSearchBarTitle(searchSuggestion.getBody());
+                Search(searchSuggestion.getBody());
             }
-
             @Override
             public void onSearchAction(String query) {
-                Toast.makeText(SearchActivity.this, "Search: "+query, Toast.LENGTH_SHORT).show();
+                if(!lastQuery.equals(query)){
+                    //TODO 删除之前的重复项
+                    lastQuery = query;
+                    historySuggestionArrayList.add(new HistorySuggestion(query));
+                }
+                mSearchView.setSearchBarTitle(query);
+                Search(query);
             }
         });
 
         mSearchView.setOnFocusChangeListener(new FloatingSearchView.OnFocusChangeListener() {
             @Override
             public void onFocus() {
-                //show suggestions when search bar gains focus (typically history suggestions)
+                mSearchView.clearSuggestions();//如果不加入这个clearSuggestion和下面那个clearSuggestion 显示顺序会有问题 不要删
                 mSearchView.swapSuggestions(historySuggestionArrayList);
             }
-
             @Override
             public void onFocusCleared() {
-                //set the title of the bar so that when focus is returned a new query begins
-                mSearchView.setSearchBarTitle("消失");
-                //you can also set setSearchText(...) to make keep the query there when not focused and when focus returns
-                //mSearchView.setSearchText(searchSuggestion.getBody());
+                mSearchView.clearSuggestions();//如果不加入这个clearSuggestion和上面那个clearSuggestion 显示顺序会有问题 不要删
+                mSearchView.setSearchBarTitle(lastQuery);
+
             }
         });
 
@@ -78,7 +89,11 @@ public class SearchActivity extends AppCompatActivity {
                         SearchActivity.this.startActivity(intent);
                     }
                 });
+    }
 
+    public void Search(String keyword){
+        ArrayList<News> newsArrayList = new ArrayList<>();
+        Toast.makeText(SearchActivity.this, keyword, Toast.LENGTH_SHORT).show();
 
     }
 }
