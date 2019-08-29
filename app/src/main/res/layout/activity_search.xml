@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".SearchActivity">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="80dp"
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <com.arlib.floatingsearchview.FloatingSearchView
         android:id="@+id/floating_search_view"
         android:layout_width="match_parent"
@@ -20,12 +26,6 @@
         app:floatingSearch_suggestionsListAnimDuration="250">
 
     </com.arlib.floatingsearchview.FloatingSearchView>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="80dp"
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
