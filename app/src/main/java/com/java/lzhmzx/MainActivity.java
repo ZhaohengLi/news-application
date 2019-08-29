@@ -85,6 +85,10 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 Toast.makeText(MainActivity.this, tab.getText(), Toast.LENGTH_LONG).show();
+                ArrayList<News> newsArrayListTemp = new ArrayList<>();
+                newsArrayListTemp.add(new News(getString(R.string.news_three_title),getString(R.string.news_three_desc),R.mipmap.news_three));
+                newsArrayListTemp.add(new News(getString(R.string.news_four_title),getString(R.string.news_four_desc),R.mipmap.news_four));
+                recyclerViewAdapter.swapData(newsArrayListTemp);
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {}

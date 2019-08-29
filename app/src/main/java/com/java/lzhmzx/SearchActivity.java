@@ -37,8 +37,16 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        mSearchView = findViewById(R.id.floating_search_view);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
+        mSearchView = findViewById(R.id.floating_search_view);
+        recyclerView = findViewById(R.id.recycler_view);
+
+        linearLayoutManager = new LinearLayoutManager(SearchActivity.this);
+        recyclerViewAdapter = new RecyclerViewAdapter(SearchActivity.this, newsArrayList);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         setHistorySuggestion();
         setUpFloatingSearchView();
@@ -101,19 +109,10 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void Search(String keyword){
-        newsArrayList.add(new News(getString(R.string.news_one_title),getString(R.string.news_one_desc),R.mipmap.news_one));
-        newsArrayList.add(new News(getString(R.string.news_two_title),getString(R.string.news_two_desc),R.mipmap.news_two));
-        newsArrayList.add(new News(getString(R.string.news_three_title),getString(R.string.news_three_desc),R.mipmap.news_three));
-        newsArrayList.add(new News(getString(R.string.news_four_title),getString(R.string.news_four_desc),R.mipmap.news_four));
+        recyclerViewAdapter.addData(new News(getString(R.string.news_four_title),getString(R.string.news_four_desc),R.mipmap.news_four));
+        recyclerViewAdapter.addData(new News(getString(R.string.news_four_title),getString(R.string.news_four_desc),R.mipmap.news_four));
 
-        linearLayoutManager = new LinearLayoutManager(SearchActivity.this);
-        recyclerViewAdapter = new RecyclerViewAdapter(SearchActivity.this, newsArrayList);
-
-        recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(recyclerViewAdapter);
-        recyclerView.setLayoutManager(linearLayoutManager);
-
+        recyclerViewAdapter.removeData(0);
     }
 }
 

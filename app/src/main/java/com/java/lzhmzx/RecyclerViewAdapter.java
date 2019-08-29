@@ -94,4 +94,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return newsList.size();
     }
 
+    public void addData(int position, News news){
+        newsList.add(position, news);
+        notifyItemInserted(position);
+    }
+
+    public void addData(News news){
+        newsList.add(news);
+        notifyItemInserted(newsList.size());
+    }
+
+    public void removeData(int position){
+        newsList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void swapData(List<News> newsList){
+        this.newsList = newsList;
+        notifyDataSetChanged();
+    }
 }
