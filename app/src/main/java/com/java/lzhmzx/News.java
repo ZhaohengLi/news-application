@@ -3,14 +3,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class News implements Parcelable {
-    private String title;
-    private String description;
-    private int pictureId;
+    private String title = "";
+    private String description = "";
+    private int pictureId = -1;
 
-    public News(String name, String age, int photoId) {
-        this.title=name;
-        this.description=age;
-        this.pictureId=photoId;
+    public News(String title, String description, int pictureId) {
+        this.title=title;
+        this.description=description;
+        this.pictureId=pictureId;
     }
     public News(){}
 

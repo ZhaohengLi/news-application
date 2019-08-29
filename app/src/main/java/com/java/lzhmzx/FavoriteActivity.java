@@ -42,9 +42,15 @@ public class FavoriteActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "已为您清空收藏的内容", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                recyclerViewAdapter.clearData();
+                Snackbar.make(view, "想要清空收藏的内容？", Snackbar.LENGTH_LONG)
+                        .setAction("是的", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                recyclerViewAdapter.clearData();
+                                Snackbar.make(view, "已为您清空收藏的内容！", Snackbar.LENGTH_LONG).show();
+                            }
+                        }).show();
+
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

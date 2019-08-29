@@ -12,10 +12,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class NewsActivity extends AppCompatActivity {
+
+    private Boolean markedAsFavorite = false;
+    private Boolean markedAsBlock = false;
+    private News news = new News();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,18 +31,32 @@ public class NewsActivity extends AppCompatActivity {
 
         setUpFloatingActionButton();
         setUpNewsDetail();
+        setUpButton();
     }
 
     public void setUpFloatingActionButton(){
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        final FloatingActionButton fabFavorite = findViewById(R.id.fab_favorite);
+
+        if(markedAsFavorite) fabFavorite.setImageDrawable(getDrawable(R.drawable.ic_favorite_white_24dp));
+        else fabFavorite.setImageDrawable(getDrawable(R.drawable.ic_favorite_border_white_24dp));
+
+        fabFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "已为收藏此新闻", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                //TODO 收藏
+                if(markedAsFavorite){
+                    Snackbar.make(view, "已取消收藏此新闻！", Snackbar.LENGTH_LONG).show();
+                    markedAsFavorite = false;
+                    operateFavorite();
+                    fabFavorite.setImageDrawable(getDrawable(R.drawable.ic_favorite_border_white_24dp));
+                }else{
+                    Snackbar.make(view, "已收藏此新闻！", Snackbar.LENGTH_LONG).show();
+                    markedAsFavorite = true;
+                    operateFavorite();
+                    fabFavorite.setImageDrawable(getDrawable(R.drawable.ic_favorite_white_24dp));
+                }
             }
         });
+
     }
 
     public void setUpNewsDetail(){
@@ -45,11 +64,61 @@ public class NewsActivity extends AppCompatActivity {
         TextView newsTitle = findViewById(R.id.news_title);
         TextView newsDescription = findViewById(R.id.news_description);
 
-        News news = getIntent().getParcelableExtra("News");
+        news = getIntent().getParcelableExtra("News");
 
         newsPicture.setImageResource(news.getPictureId());
         newsTitle.setText(news.getTitle());
         newsDescription.setText(news.getDescription());
     }
+
+    public void setUpButton(){
+        final Button buttonShare = findViewById(R.id.btn_share);
+        final Button buttonBlock = findViewById(R.id.btn_block);
+
+        if(markedAsBlock) buttonBlock.setText("ALREADY BLOCKED");
+        else buttonBlock.setText("BLOCK SIMILAR NEWS");
+
+        buttonShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO
+            }
+        });
+        buttonBlock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(markedAsBlock){
+                    Snackbar.make(view, "已取消屏蔽相似新闻！", Snackbar.LENGTH_LONG).show();
+                    markedAsBlock = false;
+                    operateBlock();
+                    buttonBlock.setText("BLOCK SIMILAR NEWS");
+                }else{
+                    Snackbar.make(view, "已屏蔽相似新闻！", Snackbar.LENGTH_LONG).show();
+                    markedAsBlock = true;
+                    operateBlock();
+                    buttonBlock.setText("ALREADY BLOCKED");
+                }
+            }
+        });
+    }
+
+    public void operateFavorite(){
+        //TODO
+        if(markedAsFavorite){
+
+        }else{
+
+        }
+    }
+
+    public void operateBlock(){
+        //TODO
+        if(markedAsBlock){
+
+        }else{
+
+        }
+    }
+
 
 }

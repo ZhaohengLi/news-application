@@ -42,7 +42,7 @@ public class RecommendActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "已为您更新推荐的内容", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "已为您更新推荐的内容！", Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show();
                 recyclerViewAdapter.clearData();
             }

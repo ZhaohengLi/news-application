@@ -98,7 +98,7 @@ public class NewsDataHelper {
         newsArrayList.add(new News("Dallas police HQ attack: Suspect believed killed during standoff",text,R.mipmap.news_one));
         newsArrayList.add(new News("Hugh Jackman says coffee can change the world",text,R.mipmap.news_two));
         newsArrayList.add(new News("Australia in charge of second Test against West Indies in Jamaica",text,R.mipmap.news_three));
-        newsArrayList.add(new News("Sweden royal wedding",text,R.mipmap.news_four));
+        newsArrayList.add(new News("Sweden royal wedding","Australia in charge of second Test against West Indies in Jamaica",R.mipmap.news_four));
         return newsArrayList;
     }
 }
