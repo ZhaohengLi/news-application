@@ -113,4 +113,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.newsList = newsList;
         notifyDataSetChanged();
     }
+
+    public void clearData(){
+        this.newsList.clear();
+        notifyDataSetChanged();
+    }
 }

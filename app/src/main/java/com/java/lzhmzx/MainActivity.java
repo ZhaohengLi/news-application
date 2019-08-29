@@ -32,13 +32,14 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    private ArrayList<News> newsArrayList = new ArrayList<>();
 
     //设置TabLayout
     private TabLayout tabLayout;
+
     private RecyclerView recyclerView;
-    private ArrayList<News> newsArrayList;
     private RecyclerViewAdapter recyclerViewAdapter;
     private LinearLayoutManager linearLayoutManager;
 
@@ -47,8 +48,10 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setUpNewsData();
         init();
+
+        newsArrayList = NewsDataHelper.getDataExamples();
+
         setUpTabLayout();
         setUpRecyclerView();
     }
@@ -84,11 +87,8 @@ public class MainActivity extends AppCompatActivity
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                //TODO switch news
                 Toast.makeText(MainActivity.this, tab.getText(), Toast.LENGTH_LONG).show();
-                ArrayList<News> newsArrayListTemp = new ArrayList<>();
-                newsArrayListTemp.add(new News(getString(R.string.news_three_title),getString(R.string.news_three_desc),R.mipmap.news_three));
-                newsArrayListTemp.add(new News(getString(R.string.news_four_title),getString(R.string.news_four_desc),R.mipmap.news_four));
-                recyclerViewAdapter.swapData(newsArrayListTemp);
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {}
@@ -99,22 +99,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void setUpRecyclerView(){
+        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+
         linearLayoutManager = new LinearLayoutManager(MainActivity.this);
         recyclerViewAdapter = new RecyclerViewAdapter(MainActivity.this, newsArrayList);
 
-        recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-    }
-
-    public void setUpNewsData(){
-        newsArrayList = new ArrayList<>();
-        newsArrayList.add(new News(getString(R.string.news_one_title),getString(R.string.news_one_desc),R.mipmap.news_one));
-        newsArrayList.add(new News(getString(R.string.news_two_title),getString(R.string.news_two_desc),R.mipmap.news_two));
-        newsArrayList.add(new News(getString(R.string.news_three_title),getString(R.string.news_three_desc),R.mipmap.news_three));
-        newsArrayList.add(new News(getString(R.string.news_four_title),getString(R.string.news_four_desc),R.mipmap.news_four));
     }
 
     @Override
@@ -156,26 +149,17 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_account) {
-
-            // Handle the camera action
+            //TODO my account
         } else if (id == R.id.nav_favorite) {
             Intent intent = new Intent(MainActivity.this, FavoriteActivity.class);
             startActivity(intent);
-
         } else if (id == R.id.nav_history) {
             Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
             startActivity(intent);
-
         } else if (id == R.id.nav_recommend) {
             Intent intent = new Intent(MainActivity.this, RecommendActivity.class);
             startActivity(intent);
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

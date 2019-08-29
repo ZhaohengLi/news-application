@@ -16,9 +16,6 @@ import android.widget.TextView;
 
 public class NewsActivity extends AppCompatActivity {
 
-    private ImageView newsPicture;
-    private TextView newsTitle, newsDescription;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,27 +23,32 @@ public class NewsActivity extends AppCompatActivity {
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
+        setUpFloatingActionButton();
+        setUpNewsDetail();
+    }
+
+    public void setUpFloatingActionButton(){
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "已为收藏此新闻", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                //TODO 收藏
             }
         });
+    }
 
-        newsPicture = findViewById(R.id.news_picture);
-        newsTitle = findViewById(R.id.news_title);
-        newsDescription = findViewById(R.id.news_description);
+    public void setUpNewsDetail(){
+        ImageView newsPicture = findViewById(R.id.news_picture);
+        TextView newsTitle = findViewById(R.id.news_title);
+        TextView newsDescription = findViewById(R.id.news_description);
 
         News news = getIntent().getParcelableExtra("News");
 
         newsPicture.setImageResource(news.getPictureId());
         newsTitle.setText(news.getTitle());
         newsDescription.setText(news.getDescription());
-
     }
-
-
 
 }

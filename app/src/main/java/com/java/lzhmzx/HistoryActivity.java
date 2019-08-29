@@ -16,8 +16,9 @@ import java.util.ArrayList;
 
 public class HistoryActivity extends AppCompatActivity {
 
+    private ArrayList<News> newsArrayList = new ArrayList<>();
+
     private RecyclerView recyclerView;
-    private ArrayList<News> newsArrayList;
     private RecyclerViewAdapter recyclerViewAdapter;
     private LinearLayoutManager linearLayoutManager;
 
@@ -31,7 +32,8 @@ public class HistoryActivity extends AppCompatActivity {
 
         setUpFloatingActionButton();
 
-        setUpNewsData();
+        newsArrayList = NewsDataHelper.getDataExamples();
+
         setUpRecyclerView();
     }
 
@@ -40,7 +42,8 @@ public class HistoryActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                recyclerViewAdapter.clearData();
+                Snackbar.make(view, "已为您清空最近浏览的内容", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -48,20 +51,13 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     public void setUpRecyclerView(){
+        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+
         linearLayoutManager = new LinearLayoutManager(HistoryActivity.this);
         recyclerViewAdapter = new RecyclerViewAdapter(HistoryActivity.this, newsArrayList);
 
-        recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setLayoutManager(linearLayoutManager);
-    }
-
-    public void setUpNewsData(){
-        newsArrayList = new ArrayList<>();
-        newsArrayList.add(new News(getString(R.string.news_one_title),getString(R.string.news_one_desc),R.mipmap.news_one));
-        newsArrayList.add(new News(getString(R.string.news_two_title),getString(R.string.news_two_desc),R.mipmap.news_two));
-        newsArrayList.add(new News(getString(R.string.news_three_title),getString(R.string.news_three_desc),R.mipmap.news_three));
-        newsArrayList.add(new News(getString(R.string.news_four_title),getString(R.string.news_four_desc),R.mipmap.news_four));
     }
 }

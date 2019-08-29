@@ -47,7 +47,6 @@ public class News implements Parcelable {
         parcel.writeString(title);
         parcel.writeString(description);
         parcel.writeInt(pictureId);
-
     }
 
     public static final Parcelable.Creator<News> CREATOR = new Creator<News>() {
@@ -58,7 +57,6 @@ public class News implements Parcelable {
             news.pictureId = source.readInt();
             return news;
         }
-
         public News[] newArray(int size) {
             return new News[size];
         }
