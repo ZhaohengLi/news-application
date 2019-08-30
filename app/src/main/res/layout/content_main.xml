@@ -11,10 +11,14 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
-        style="@style/TabLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabMode="scrollable"/>
+        app:tabMode="scrollable"
+        app:tabTextColor="@color/colorTextTitle"
+        app:tabBackground="@color/colorCardBackground"
+        app:tabIndicatorColor="@color/colorPrimary"
+        app:tabIndicatorHeight="2dp"
+        app:tabSelectedTextColor="@color/colorPrimary" />
 
     <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
         android:id="@+id/refresh_layout"
@@ -24,7 +28,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@color/colorBackground"/>
 
     </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
 

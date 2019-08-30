@@ -1,5 +1,6 @@
 package com.java.lzhmzx;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -26,6 +27,7 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+        setUpStatusBar();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -35,6 +37,10 @@ public class HistoryActivity extends AppCompatActivity {
         newsArrayList = NewsDataHelper.getDataExamples();
 
         setUpRecyclerView();
+    }
+
+    private void setUpStatusBar(){
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
     }
 
     private void setUpFloatingActionButton(){

@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
-    android:layout_marginBottom="5dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="5dp">
 
@@ -13,8 +12,10 @@
         android:layout_height="wrap_content"
         android:foreground="?android:attr/selectableItemBackground"
         android:clickable="true"
+        android:layout_margin="4dp"
         app:cardCornerRadius="5dp"
-        app:cardElevation="10dp">
+        app:cardElevation="6dp"
+        android:backgroundTint="@color/colorCardBackground">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -39,15 +40,15 @@
                     android:maxLines="1"
                     android:textSize="20sp"
                     android:padding="5dp"
-                    android:textColor="#ffffff"
-                    android:gravity="center"/>
+                    android:textColor="#FFFFFF"
+                    android:gravity="center" />
                 <ImageView
                     android:id="@+id/marked_as_read"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentStart="true"
-                    android:src="@drawable/ic_check_circle_black_24dp"/>
+                    android:src="@drawable/ic_check_circle_twitter_24dp"/>
             </RelativeLayout>
 
             <TextView
@@ -56,7 +57,8 @@
                 android:layout_below="@+id/news_header"
                 android:layout_margin="10dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorTextTitle"/>
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -65,17 +67,18 @@
                 android:layout_height="wrap_content">
                 <Button
                     android:id="@+id/btn_share"
-                    android:text="SHARE"
-                    android:background="#00000000"
+                    android:text="分享"
+                    android:textColor="@color/colorTextTitle"
+                    android:background="@color/transparent"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <Button
                     android:id="@+id/btn_more"
-                    android:background="#00000000"
+                    android:background="@color/transparent"
                     android:textColor="@color/colorPrimary"
-                    android:text="READ MORE"
+                    android:text="查看详情"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>

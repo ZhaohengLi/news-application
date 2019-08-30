@@ -28,7 +28,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/footer"/>
+                android:src="@mipmap/footer"
+                android:fitsSystemWindows="true"/>
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -50,7 +51,6 @@
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        android:backgroundTint="@color/colorPrimaryLight"
         app:srcCompat="@drawable/ic_refresh_white_24dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

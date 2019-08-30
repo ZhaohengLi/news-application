@@ -1,6 +1,7 @@
 package com.java.lzhmzx;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -8,6 +9,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
@@ -50,7 +52,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         setContentView(R.layout.activity_main);
+        setUpStatusBar();
         init();
 
         newsArrayList = NewsDataHelper.getDataExamples();
@@ -79,6 +83,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void setUpStatusBar(){
+        getWindow().setStatusBarColor(getColor(R.color.colorPrimary));
     }
 
     public void setUpTabLayout(){
@@ -157,6 +165,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }else if(id == R.id.action_night_mode){
+            int mode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+            if(mode == Configuration.UI_MODE_NIGHT_YES) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            } else if(mode == Configuration.UI_MODE_NIGHT_NO) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+            recreate();
         }
 
         return super.onOptionsItemSelected(item);

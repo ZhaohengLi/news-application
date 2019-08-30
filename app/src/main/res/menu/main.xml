@@ -7,9 +7,9 @@
         android:title="管理订阅"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_other"
+        android:id="@+id/action_night_mode"
         android:orderInCategory="100"
-        android:title="其他"
+        android:title="切换色调"
         app:showAsAction="never" />
 
 </menu>

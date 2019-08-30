@@ -42,7 +42,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             share = itemView.findViewById(R.id.btn_share);
             readMore = itemView.findViewById(R.id.btn_more);
 
-            newsTitle.setBackgroundColor(Color.argb(30,0,0,0));
+            newsTitle.setBackgroundColor(Color.argb(40,0,0,0));
         }
     }
 

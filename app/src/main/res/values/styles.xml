@@ -1,8 +1,6 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -15,15 +13,9 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <style name="TabLayoutStyle" parent="Base.Widget.Design.TabLayout">
-        <item name="tabBackground">@color/white</item>
-        <item name="tabIndicatorColor">@color/colorPrimary</item>
-        <item name="tabIndicatorHeight">2dp</item>
-        <item name="tabSelectedTextColor">@color/colorPrimary</item>
-        <item name="android:textSize">15sp</item>
-        <item name="android:textColor">@color/black</item>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
+        <item name="android:backgroundTint">@color/colorBackground</item>
+        <item name="android:textColor">@color/colorTextTitle</item>
     </style>
 
 </resources>

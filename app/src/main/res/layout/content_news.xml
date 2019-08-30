@@ -10,11 +10,13 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorBackground">
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:backgroundTint="@color/colorCardBackground"
             app:cardCornerRadius="5dp"
             app:cardElevation="10dp">
 
@@ -36,14 +38,16 @@
                     android:textSize="22sp"
                     android:padding="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorTextTitle"/>
                 <TextView
                     android:id="@+id/news_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="5dp"
                     android:layout_below="@+id/news_title"
-                    android:layout_margin="15dp" />
+                    android:layout_margin="15dp"
+                    android:textColor="@color/colorTextTitle"/>
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -53,18 +57,17 @@
                     android:layout_marginTop="20dp">
                     <Button
                         android:id="@+id/btn_share"
-                        android:text="SHARE"
-                        android:background="#00000000"
+                        android:background="@color/transparent"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="20dp"
+                        android:text="分享"
                         android:textColor="@color/colorPrimary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <Button
                         android:id="@+id/btn_block"
-                        android:background="#00000000"
-                        android:textColor="@color/red"
-                        android:text="BLOCK SIMILAR NEWS"
+                        android:background="@color/transparent"
+                        android:textColor="@color/colorWarning"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>

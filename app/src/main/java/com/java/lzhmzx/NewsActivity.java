@@ -1,6 +1,9 @@
 package com.java.lzhmzx;
 
+import android.app.StatusBarManager;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -8,6 +11,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
@@ -27,11 +31,19 @@ public class NewsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
 
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        setUpStatusBar();
 
         setUpFloatingActionButton();
         setUpNewsDetail();
         setUpButton();
+    }
+
+    private void setUpStatusBar(){
+        getWindow().setStatusBarColor(getColor(R.color.colorBackground));
+        int mode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        if(mode == Configuration.UI_MODE_NIGHT_NO)
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
     }
 
     public void setUpFloatingActionButton(){
@@ -75,8 +87,8 @@ public class NewsActivity extends AppCompatActivity {
         final Button buttonShare = findViewById(R.id.btn_share);
         final Button buttonBlock = findViewById(R.id.btn_block);
 
-        if(markedAsBlock) buttonBlock.setText("ALREADY BLOCKED");
-        else buttonBlock.setText("BLOCK SIMILAR NEWS");
+        if(markedAsBlock) buttonBlock.setText("已屏蔽类似的新闻");
+        else buttonBlock.setText("屏蔽类似的新闻");
 
         buttonShare.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,15 +100,15 @@ public class NewsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(markedAsBlock){
-                    Snackbar.make(view, "已取消屏蔽相似新闻！", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, "已取消屏蔽类似的新闻！", Snackbar.LENGTH_LONG).show();
                     markedAsBlock = false;
                     operateBlock();
-                    buttonBlock.setText("BLOCK SIMILAR NEWS");
+                    buttonBlock.setText("屏蔽类似的新闻");
                 }else{
-                    Snackbar.make(view, "已屏蔽相似新闻！", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, "已屏蔽类似的新闻！", Snackbar.LENGTH_LONG).show();
                     markedAsBlock = true;
                     operateBlock();
-                    buttonBlock.setText("ALREADY BLOCKED");
+                    buttonBlock.setText("已屏蔽类似的新闻");
                 }
             }
         });
