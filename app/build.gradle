@@ -29,4 +29,5 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.github.arimorty:floatingsearchview:2.1.1'
+    implementation 'com.lcodecorex:tkrefreshlayout:1.0.7'
 }
