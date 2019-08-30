@@ -15,6 +15,8 @@ import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -109,13 +111,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        final SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        final TwinklingRefreshLayout twinklingRefreshLayout = findViewById(R.id.refresh_layout);
+        twinklingRefreshLayout.setOnRefreshListener(new RefreshListenerAdapter() {
             @Override
-            public void onRefresh() {
-                //TODO
-                Toast.makeText(MainActivity.this, "Refreshing", Toast.LENGTH_LONG).show();
-                swipeRefreshLayout.setRefreshing(false);
+            public void onRefresh(TwinklingRefreshLayout refreshLayout) {
+                super.onRefresh(refreshLayout);
+                Toast.makeText(MainActivity.this, "refreshing", Toast.LENGTH_LONG).show();
+                twinklingRefreshLayout.finishRefreshing();
+            }
+
+            @Override
+            public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
+                super.onLoadMore(refreshLayout);
+                Toast.makeText(MainActivity.this, "loadmore", Toast.LENGTH_LONG).show();
+                twinklingRefreshLayout.finishLoadmore();
             }
         });
 

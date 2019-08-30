@@ -16,8 +16,8 @@
         android:layout_height="wrap_content"
         app:tabMode="scrollable"/>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_layout"
+    <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -26,7 +26,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+
+
 
 
 
