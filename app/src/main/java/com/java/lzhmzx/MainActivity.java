@@ -164,6 +164,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(MainActivity.this, ChannelActivity.class);
+            startActivity(intent);
             return true;
         }else if(id == R.id.action_night_mode){
             int mode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
@@ -173,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             }
             recreate();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
