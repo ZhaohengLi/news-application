@@ -2,6 +2,7 @@ package com.java.lzhmzx;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class DataHelper {
 
@@ -103,16 +104,18 @@ public class DataHelper {
         return newsArrayList;
     }
 
-    public static void setSampleChannels(ArrayList<String> channels){
-        channels.add("娱乐");
-        channels.add("军事");
-        channels.add("教育");
-        channels.add("文化");
-        channels.add("健康");
-        channels.add("财经");
-        channels.add("体育");
-        channels.add("汽车");
-        channels.add("科技");
-        channels.add("社会");
+    public static ArrayList<String> getSampleChannelList(){
+        ArrayList<String> channelList = new ArrayList<>();
+        channelList.add("娱乐");
+        channelList.add("军事");
+        channelList.add("教育");
+        channelList.add("文化");
+        channelList.add("健康");
+        channelList.add("财经");
+        channelList.add("体育");
+        channelList.add("汽车");
+        channelList.add("科技");
+        channelList.add("社会");
+        return channelList;
     }
 }

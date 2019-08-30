@@ -1,27 +1,35 @@
 package com.java.lzhmzx;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ChannelActivity extends AppCompatActivity {
-
     ArrayList<String> arrayListAdded = new ArrayList<>();
     ArrayList<String> arrayListNotAdded = new ArrayList<>();
+
     RecyclerView recyclerViewAdded, recyclerViewNotAdded;
     ChannelRecyclerViewAdapter channelRecyclerViewAdapterAdded, channelRecyclerViewAdapterNotAdded;
     ChannelGridLayoutManager gridLayoutManagerAdded, gridLayoutManagerNotAdded;
@@ -30,22 +38,16 @@ public class ChannelActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_channel);
+
         setUpStatusBar();
-
-        Button button = findViewById(R.id.button_confirm);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ChannelActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        DataHelper.setSampleChannels(arrayListAdded);
-        DataHelper.setSampleChannels(arrayListNotAdded);
-
-        //data设定需先于view设定
+        setUpButton();
+        setUpData();//data设定需先于view设定
         setUpRecyclerView();
+    }
+
+    public void setUpData(){
+        arrayListAdded = DataHelper.getSampleChannelList();
+        arrayListNotAdded = DataHelper.getSampleChannelList();
     }
 
     private void setUpStatusBar(){
@@ -53,6 +55,16 @@ public class ChannelActivity extends AppCompatActivity {
         int mode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         if(mode == Configuration.UI_MODE_NIGHT_NO)
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+    }
+
+    private void setUpButton(){
+        Button button = findViewById(R.id.button_confirm);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveChannel();
+            }
+        });
     }
 
     private void setUpRecyclerView() {
@@ -70,6 +82,51 @@ public class ChannelActivity extends AppCompatActivity {
 
         recyclerViewAdded.setAdapter(channelRecyclerViewAdapterAdded);
         recyclerViewNotAdded.setAdapter(channelRecyclerViewAdapterNotAdded);
+
+        recyclerViewAdded.addOnItemTouchListener(new RecyclerViewClickListener(this, recyclerViewAdded,
+                new RecyclerViewClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+//                        Toast.makeText(ChannelActivity.this,"Click "+arrayListAdded.get(position),Toast.LENGTH_SHORT).show();
+                        deleteChannel(position);
+                    }
+                    @Override
+                    public void onItemLongClick(View view, int position) {}
+                }));
+
+        recyclerViewNotAdded.addOnItemTouchListener(new RecyclerViewClickListener(this, recyclerViewNotAdded,
+                new RecyclerViewClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+//                        Toast.makeText(ChannelActivity.this,"Click "+arrayListAdded.get(position),Toast.LENGTH_SHORT).show();
+                        addChannel(position);
+                    }
+                    @Override
+                    public void onItemLongClick(View view, int position) {}
+                }));
+
+        ItemTouchHelperCallback itemTouchHelperCallback = new ItemTouchHelperCallback(channelRecyclerViewAdapterAdded);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerViewAdded);
+
+
+    }
+
+    private void addChannel(int position){
+        String channel = arrayListNotAdded.get(position);
+        channelRecyclerViewAdapterNotAdded.removeData(position);
+        channelRecyclerViewAdapterAdded.addData(channel);
+    }
+
+    private void deleteChannel(int position){
+        String channel = arrayListAdded.get(position);
+        channelRecyclerViewAdapterAdded.removeData(position);
+        channelRecyclerViewAdapterNotAdded.addData(channel);
+    }
+
+    private void saveChannel(){
+        Intent intent = new Intent(ChannelActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 
 }
@@ -98,19 +155,12 @@ class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecyclerVie
     @Override
     public ChannelRecyclerViewAdapter.ChannelViewHolder onCreateViewHolder(ViewGroup viewGroup, int i){
         View view = LayoutInflater.from(context).inflate(R.layout.item_channel, viewGroup, false);
-        ChannelViewHolder channelViewHolder = new ChannelViewHolder(view);
-        return channelViewHolder;
+        return new ChannelViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ChannelRecyclerViewAdapter.ChannelViewHolder channelViewHolder, final int position){
+    public void onBindViewHolder(final ChannelRecyclerViewAdapter.ChannelViewHolder channelViewHolder, final int position){
         channelViewHolder.textView.setText(channelList.get(position));
-        channelViewHolder.cardView.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                removeData(position);
-            }
-        });
     }
 
     @Override
@@ -130,23 +180,20 @@ class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecyclerVie
 
     public void removeData(int position){
         channelList.remove(position);
-        notifyDataSetChanged();
+        notifyItemRemoved(position);
     }
 
-    public void swapData(List<String> channelList){
-        this.channelList = channelList;
-        notifyDataSetChanged();
+    public void dragData(int positionFrom, int positionTo){
+        String channel = channelList.get(positionFrom);
+        channelList.remove(positionFrom);
+        channelList.add(positionTo,channel);
+        notifyItemMoved(positionFrom, positionTo);
     }
-
-    public void clearData(){
-        this.channelList.clear();
-        notifyDataSetChanged();
-    }
-
 }
 
 
 class ChannelGridLayoutManager extends GridLayoutManager {
+    //为了使GridLayout不滚动
     public ChannelGridLayoutManager(Context context, int spanCount) {
         super(context, spanCount);
     }
@@ -154,4 +201,89 @@ class ChannelGridLayoutManager extends GridLayoutManager {
     public boolean canScrollVertically() {
         return false;
     }
+}
+
+
+class RecyclerViewClickListener implements RecyclerView.OnItemTouchListener {
+
+    private GestureDetector mGestureDetector;
+    private OnItemClickListener mListener;
+
+    //内部接口，定义点击方法以及长按方法
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+
+        void onItemLongClick(View view, int position);
+    }
+
+    public RecyclerViewClickListener(Context context, final RecyclerView recyclerView,OnItemClickListener listener){
+        mListener = listener;
+        mGestureDetector = new GestureDetector(context,
+                new GestureDetector.SimpleOnGestureListener(){ //这里选择SimpleOnGestureListener实现类，可以根据需要选择重写的方法
+                    //单击事件
+                    @Override
+                    public boolean onSingleTapUp(MotionEvent e) {
+                        View childView = recyclerView.findChildViewUnder(e.getX(),e.getY());
+                        if(childView != null && mListener != null){
+                            mListener.onItemClick(childView,recyclerView.getChildLayoutPosition(childView));
+                            return true;
+                        }
+                        return false;
+                    }
+                    //长按事件
+                    @Override
+                    public void onLongPress(MotionEvent e) {
+                        View childView = recyclerView.findChildViewUnder(e.getX(),e.getY());
+                        if(childView != null && mListener != null){
+                            mListener.onItemLongClick(childView,recyclerView.getChildLayoutPosition(childView));
+                        }
+                    }
+                });
+    }
+    @Override
+    public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+        //把事件交给GestureDetector处理
+        if(mGestureDetector.onTouchEvent(e)){
+            return true;
+        }else
+            return false;
+    }
+
+    @Override
+    public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+    }
+
+    @Override
+    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+    }
+}
+
+
+class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
+    private ChannelRecyclerViewAdapter channelRecyclerViewAdapter;
+
+    ItemTouchHelperCallback(ChannelRecyclerViewAdapter channelRecyclerViewAdapter) {
+        this.channelRecyclerViewAdapter = channelRecyclerViewAdapter;
+    }
+    @Override
+    public boolean isLongPressDragEnabled() {
+        return true;
+    }
+    @Override
+    public boolean isItemViewSwipeEnabled() {
+        return false;
+    }
+    @Override
+    public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+        final int swipeFlags = 0;
+        return makeMovementFlags(dragFlags, swipeFlags);
+    }
+    @Override
+    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+        channelRecyclerViewAdapter.dragData(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+        return true;
+    }
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {}
 }
