@@ -1,6 +1,7 @@
 package com.java.lzhmzx;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class NewsDataHelper {
 
@@ -100,5 +101,18 @@ public class NewsDataHelper {
         newsArrayList.add(new News("Australia in charge of second Test against West Indies in Jamaica",text,R.mipmap.news_three,true));
         newsArrayList.add(new News("Sweden royal wedding","Australia in charge of second Test against West Indies in Jamaica",R.mipmap.news_four,false));
         return newsArrayList;
+    }
+
+    public static void setSampleChannels(ArrayList<String> channels){
+        channels.add("娱乐");
+        channels.add("军事");
+        channels.add("教育");
+        channels.add("文化");
+        channels.add("健康");
+        channels.add("财经");
+        channels.add("体育");
+        channels.add("汽车");
+        channels.add("科技");
+        channels.add("社会");
     }
 }

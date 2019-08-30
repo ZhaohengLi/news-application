@@ -1,75 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChannelActivity"
-    android:background="@color/colorBackground">
+    android:background="@color/colorBackground"
+    android:orientation="vertical"
+    tools:context=".ChannelActivity">
 
     <TextView
-        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:text="选择你的订阅内容"
+        android:textAlignment="center"
         android:textColor="@color/colorPrimary"
-        android:textSize="35dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="50dp"/>
+        android:textSize="35dp" />
 
-
-    <RelativeLayout
-        android:id="@+id/body"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/header">
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:text="已订阅"
+        android:textColor="@color/colorTextDescription"
+        android:textSize="15dp"
+        android:padding="10dp"
+        android:paddingStart="30dp"/>
 
-        <TextView
-            android:id="@+id/is_added_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="已订阅"
-            android:textColor="@color/colorTextDescription"
-            android:textSize="15dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/transparent"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_added"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/is_added"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/is_added_text"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:text="未订阅"
+        android:textColor="@color/colorTextDescription"
+        android:textSize="15dp"
+        android:padding="10dp"
+        android:paddingStart="30dp" />
 
-        <TextView
-            android:id="@+id/is_not_added_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="未订阅"
-            android:textColor="@color/colorTextDescription"
-            android:textSize="15dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/is_added"
-            android:background="@color/transparent"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_not_added"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/is_not_added"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/is_not_added_text" />
+    <Button
+        android:id="@+id/button_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="@color/transparent"
+        android:text="确认"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16dp" />
 
-        <Button
-            android:id="@+id/btn_confirm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="确认"
-            android:textSize="16dp"
-            android:textColor="@color/colorPrimary"
-            android:background="@color/transparent"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_margin="20dp" />
-    </RelativeLayout>
-
-</RelativeLayout>
+</LinearLayout>

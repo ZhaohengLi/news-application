@@ -127,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(MainActivity.this, "refreshing", Toast.LENGTH_LONG).show();
                 twinklingRefreshLayout.finishRefreshing();
             }
-
             @Override
             public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
                 super.onLoadMore(refreshLayout);

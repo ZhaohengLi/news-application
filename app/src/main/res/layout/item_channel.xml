@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="6dp"
+        android:padding="4dp"
+        android:layout_margin="4dp"
+        android:backgroundTint="@color/colorCardBackground">
+        <TextView
+            android:id="@+id/text_view_channel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="样例"
+            android:textSize="15dp"
+            android:textColor="@color/colorTextTitle"
+            android:padding="7dp"/>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
