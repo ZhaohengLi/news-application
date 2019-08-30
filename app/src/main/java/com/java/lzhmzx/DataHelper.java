@@ -3,7 +3,7 @@ package com.java.lzhmzx;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class NewsDataHelper {
+public class DataHelper {
 
     public static String text = "\"Material is the metaphor.\\n\\n\"\n" +
             "\n" +

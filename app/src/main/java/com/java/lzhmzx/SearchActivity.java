@@ -8,17 +8,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
-import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
     //搜索相关
@@ -29,7 +24,7 @@ public class SearchActivity extends AppCompatActivity {
     //新闻列表相关
     private ArrayList<News> newsArrayList = new ArrayList<>();
     private RecyclerView recyclerView;
-    private RecyclerViewAdapter recyclerViewAdapter;
+    private NewsRecyclerViewAdapter newsRecyclerViewAdapter;
     private LinearLayoutManager linearLayoutManager;
 
 
@@ -52,9 +47,9 @@ public class SearchActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         linearLayoutManager = new LinearLayoutManager(SearchActivity.this);
-        recyclerViewAdapter = new RecyclerViewAdapter(SearchActivity.this, newsArrayList);
+        newsRecyclerViewAdapter = new NewsRecyclerViewAdapter(SearchActivity.this, newsArrayList);
 
-        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerView.setAdapter(newsRecyclerViewAdapter);
         recyclerView.setLayoutManager(linearLayoutManager);
     }
 
@@ -114,7 +109,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void Search(String keyword){
-        recyclerViewAdapter.swapData(NewsDataHelper.getDataExamples());
+        newsRecyclerViewAdapter.swapData(DataHelper.getDataExamples());
     }
 }
 

@@ -20,7 +20,7 @@ public class HistoryActivity extends AppCompatActivity {
     private ArrayList<News> newsArrayList = new ArrayList<>();
 
     private RecyclerView recyclerView;
-    private RecyclerViewAdapter recyclerViewAdapter;
+    private NewsRecyclerViewAdapter newsRecyclerViewAdapter;
     private LinearLayoutManager linearLayoutManager;
 
     @Override
@@ -34,7 +34,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         setUpFloatingActionButton();
 
-        newsArrayList = NewsDataHelper.getDataExamples();
+        newsArrayList = DataHelper.getDataExamples();
 
         setUpRecyclerView();
     }
@@ -52,7 +52,7 @@ public class HistoryActivity extends AppCompatActivity {
                         .setAction("是的", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                recyclerViewAdapter.clearData();
+                                newsRecyclerViewAdapter.clearData();
                                 Snackbar.make(view, "已为您清空最近浏览过的内容！", Snackbar.LENGTH_LONG).show();
                             }
                         }).show();
@@ -67,9 +67,9 @@ public class HistoryActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         linearLayoutManager = new LinearLayoutManager(HistoryActivity.this);
-        recyclerViewAdapter = new RecyclerViewAdapter(HistoryActivity.this, newsArrayList);
+        newsRecyclerViewAdapter = new NewsRecyclerViewAdapter(HistoryActivity.this, newsArrayList);
 
-        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerView.setAdapter(newsRecyclerViewAdapter);
         recyclerView.setLayoutManager(linearLayoutManager);
     }
 }

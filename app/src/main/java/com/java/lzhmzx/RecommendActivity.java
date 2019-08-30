@@ -20,7 +20,7 @@ public class RecommendActivity extends AppCompatActivity {
     private ArrayList<News> newsArrayList = new ArrayList<>();
 
     private RecyclerView recyclerView;
-    private RecyclerViewAdapter recyclerViewAdapter;
+    private NewsRecyclerViewAdapter newsRecyclerViewAdapter;
     private LinearLayoutManager linearLayoutManager;
 
     @Override
@@ -33,7 +33,7 @@ public class RecommendActivity extends AppCompatActivity {
 
         setUpFloatingActionButton();
 
-        newsArrayList = NewsDataHelper.getDataExamples();
+        newsArrayList = DataHelper.getDataExamples();
 
         setUpRecyclerView();
     }
@@ -49,7 +49,7 @@ public class RecommendActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "已为您更新推荐的内容！", Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show();
-                recyclerViewAdapter.clearData();
+                newsRecyclerViewAdapter.clearData();
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -60,9 +60,9 @@ public class RecommendActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         linearLayoutManager = new LinearLayoutManager(RecommendActivity.this);
-        recyclerViewAdapter = new RecyclerViewAdapter(RecommendActivity.this, newsArrayList);
+        newsRecyclerViewAdapter = new NewsRecyclerViewAdapter(RecommendActivity.this, newsArrayList);
 
-        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerView.setAdapter(newsRecyclerViewAdapter);
         recyclerView.setLayoutManager(linearLayoutManager);
     }
 }

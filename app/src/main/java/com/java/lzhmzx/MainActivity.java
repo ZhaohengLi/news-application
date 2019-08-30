@@ -5,7 +5,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import android.view.View;
 
@@ -26,14 +25,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.Menu;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -45,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TabLayout tabLayout;
 
     private RecyclerView recyclerView;
-    private RecyclerViewAdapter recyclerViewAdapter;
+    private NewsRecyclerViewAdapter newsRecyclerViewAdapter;
     private LinearLayoutManager linearLayoutManager;
 
 
@@ -57,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setUpStatusBar();
         init();
 
-        newsArrayList = NewsDataHelper.getDataExamples();
+        newsArrayList = DataHelper.getDataExamples();
 
         setUpTabLayout();
         setUpRecyclerView();
@@ -114,9 +109,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerView.setHasFixedSize(true);
 
         linearLayoutManager = new LinearLayoutManager(MainActivity.this);
-        recyclerViewAdapter = new RecyclerViewAdapter(MainActivity.this, newsArrayList);
+        newsRecyclerViewAdapter = new NewsRecyclerViewAdapter(MainActivity.this, newsArrayList);
 
-        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerView.setAdapter(newsRecyclerViewAdapter);
         recyclerView.setLayoutManager(linearLayoutManager);
 
         final TwinklingRefreshLayout twinklingRefreshLayout = findViewById(R.id.refresh_layout);

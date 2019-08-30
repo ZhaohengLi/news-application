@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
-import android.view.WindowManager;
 
 import java.util.ArrayList;
 
@@ -21,7 +20,7 @@ public class FavoriteActivity extends AppCompatActivity {
     private ArrayList<News> newsArrayList = new ArrayList<>();
 
     private RecyclerView recyclerView;
-    private RecyclerViewAdapter recyclerViewAdapter;
+    private NewsRecyclerViewAdapter newsRecyclerViewAdapter;
     private LinearLayoutManager linearLayoutManager;
 
     @Override
@@ -34,7 +33,7 @@ public class FavoriteActivity extends AppCompatActivity {
 
         setUpFloatingActionButton();
 
-        newsArrayList = NewsDataHelper.getDataExamples();
+        newsArrayList = DataHelper.getDataExamples();
 
         setUpRecyclerView();
     }
@@ -52,7 +51,7 @@ public class FavoriteActivity extends AppCompatActivity {
                         .setAction("是的", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                recyclerViewAdapter.clearData();
+                                newsRecyclerViewAdapter.clearData();
                                 Snackbar.make(view, "已为您清空收藏的内容！", Snackbar.LENGTH_LONG).show();
                             }
                         }).show();
@@ -67,9 +66,9 @@ public class FavoriteActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         linearLayoutManager = new LinearLayoutManager(FavoriteActivity.this);
-        recyclerViewAdapter = new RecyclerViewAdapter(FavoriteActivity.this, newsArrayList);
+        newsRecyclerViewAdapter = new NewsRecyclerViewAdapter(FavoriteActivity.this, newsArrayList);
 
-        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerView.setAdapter(newsRecyclerViewAdapter);
         recyclerView.setLayoutManager(linearLayoutManager);
     }
 }

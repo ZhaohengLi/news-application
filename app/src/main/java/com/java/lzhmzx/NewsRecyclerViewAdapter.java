@@ -15,12 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.NewsViewHolder> {
+public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerViewAdapter.NewsViewHolder> {
 
     private Context context;
     private List<News> newsList;
 
-    public RecyclerViewAdapter(Context context, List<News> newsList){
+    public NewsRecyclerViewAdapter(Context context, List<News> newsList){
         //TODO 注意参数顺序
         this.context = context;
         this.newsList = newsList;
@@ -47,14 +47,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public RecyclerViewAdapter.NewsViewHolder onCreateViewHolder(ViewGroup viewGroup, int i){
+    public NewsRecyclerViewAdapter.NewsViewHolder onCreateViewHolder(ViewGroup viewGroup, int i){
         View view = LayoutInflater.from(context).inflate(R.layout.item_news, viewGroup, false);
         NewsViewHolder newsViewHolder = new NewsViewHolder(view);
         return newsViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerViewAdapter.NewsViewHolder newsViewHolder, final int position){
+    public void onBindViewHolder(NewsRecyclerViewAdapter.NewsViewHolder newsViewHolder, final int position){
         newsViewHolder.newPicture.setImageResource(newsList.get(position).getPictureId());
         newsViewHolder.newsTitle.setText(newsList.get(position).getTitle());
         newsViewHolder.newsDescription.setText(newsList.get(position).getDescription());
