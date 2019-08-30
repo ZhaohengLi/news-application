@@ -10,7 +10,8 @@
         android:layout_marginTop="80dp"
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@color/colorBackground"/>
 
     <com.arlib.floatingsearchview.FloatingSearchView
         android:id="@+id/floating_search_view"
@@ -23,7 +24,13 @@
         app:floatingSearch_searchBarMarginTop="10dp"
         app:floatingSearch_searchHint="用关键词搜索新闻"
         app:floatingSearch_showSearchKey="true"
-        app:floatingSearch_suggestionsListAnimDuration="250">
+        app:floatingSearch_suggestionsListAnimDuration="250"
+
+        app:floatingSearch_backgroundColor="@color/colorCardBackground"
+        app:floatingSearch_hintTextColor="@color/colorTextDescription"
+
+        app:floatingSearch_viewSearchInputTextColor="@color/colorTextTitle"
+        app:floatingSearch_viewSuggestionItemTextColor="@color/colorTextDescription">
 
     </com.arlib.floatingsearchview.FloatingSearchView>
 
