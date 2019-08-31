@@ -57,7 +57,11 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
         newsViewHolder.newPicture.setImageResource(newsList.get(position).getPictureId());
         newsViewHolder.newsTitle.setText(newsList.get(position).getTitle());
         newsViewHolder.newsDescription.setText(newsList.get(position).getDescription());
-        if(!newsList.get(position).getIsRead()) newsViewHolder.markedAsRead.setVisibility(View.INVISIBLE);
+        if(!newsList.get(position).getIsRead()) {
+            newsViewHolder.markedAsRead.setVisibility(View.INVISIBLE);
+        }else{
+            newsViewHolder.markedAsRead.setVisibility(View.VISIBLE);
+        }
 
         newsViewHolder.cardView.setOnClickListener(new View.OnClickListener(){
             @Override

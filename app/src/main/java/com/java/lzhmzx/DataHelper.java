@@ -144,8 +144,15 @@ public class DataHelper {
 
     public static ArrayList<News> getNewsArrayList(String channel){
         ArrayList<News> newsArrayList = new ArrayList<>();
-        if(channel.equals("娱乐")) newsArrayList.add(new News("Dallas police HQ attack: Suspect believed killed during standoff",text,R.mipmap.news_one, false));
-        if(channel.equals("军事")) newsArrayList.add(new News("Hugh Jackman says coffee can change the world",text,R.mipmap.news_two,true));
+        if(channel.equals("娱乐")) {
+            newsArrayList.add(new News("Dallas police HQ attack: Suspect believed killed during standoff",text,R.mipmap.news_one, false));
+            newsArrayList.add(new News("Hugh Jackman says coffee can change the world",text,R.mipmap.news_two,true));
+            newsArrayList.add(new News("Australia in charge of second Test against West Indies in Jamaica",text,R.mipmap.news_three,true));
+        }
+        if(channel.equals("军事")) {
+            newsArrayList.add(new News("Hugh Jackman says coffee can change the world",text,R.mipmap.news_two,true));
+            newsArrayList.add(new News("Dallas police HQ attack: Suspect believed killed during standoff",text,R.mipmap.news_one, false));
+        }
         if(channel.equals("教育")) newsArrayList.add(new News("Australia in charge of second Test against West Indies in Jamaica",text,R.mipmap.news_three,true));
         if(channel.equals("文化")) newsArrayList.add(new News("Sweden royal wedding","Australia in charge of second Test against West Indies in Jamaica",R.mipmap.news_four,false));
         return newsArrayList;
