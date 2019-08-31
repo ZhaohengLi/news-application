@@ -40,6 +40,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorTextTitle"/>
+                <VideoView
+                    android:id="@+id/news_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
                 <TextView
                     android:id="@+id/news_description"
                     android:layout_width="match_parent"
@@ -48,10 +52,25 @@
                     android:layout_below="@+id/news_title"
                     android:layout_margin="15dp"
                     android:textColor="@color/colorTextTitle"/>
+                <TextView
+                    android:id="@+id/news_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/news_description"
+                    android:layout_margin="15dp"
+                    android:textColor="@color/colorTextDescription" />
+                <TextView
+                    android:id="@+id/news_origin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/news_time"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:textColor="@color/colorTextDescription" />
 
                 <LinearLayout
                     android:orientation="horizontal"
-                    android:layout_below="@+id/news_description"
+                    android:layout_below="@id/news_origin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp">

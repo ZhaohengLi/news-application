@@ -28,7 +28,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
     static class NewsViewHolder extends RecyclerView.ViewHolder{
         CardView cardView;
         ImageView newPicture, markedAsRead;
-        TextView newsTitle, newsDescription;
+        TextView newsTitle, newsDescription, newsTime;
         Button share, readMore;
 
         public NewsViewHolder(final View itemView){
@@ -40,6 +40,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
             newsDescription = itemView.findViewById(R.id.news_description);
             share = itemView.findViewById(R.id.btn_share);
             readMore = itemView.findViewById(R.id.btn_more);
+            newsTime = itemView.findViewById(R.id.text_view_time);
 
             newsTitle.setBackgroundColor(Color.argb(40,0,0,0));
         }
@@ -57,6 +58,8 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
         newsViewHolder.newPicture.setImageResource(newsList.get(position).getPictureId());
         newsViewHolder.newsTitle.setText(newsList.get(position).getTitle());
         newsViewHolder.newsDescription.setText(newsList.get(position).getDescription());
+        newsViewHolder.newsTime.setText(newsList.get(position).getTime());
+
         if(!newsList.get(position).getIsRead()) {
             newsViewHolder.markedAsRead.setVisibility(View.INVISIBLE);
         }else{

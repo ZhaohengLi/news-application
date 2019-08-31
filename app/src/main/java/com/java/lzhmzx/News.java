@@ -3,10 +3,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class News implements Parcelable {
-    private String title = "";
-    private String description = "";
+    private String title = "新闻标题";
+    private String description = "新闻描述";
     private int pictureId = -1;
     private Boolean isRead = false;
+    private String time = "XXXX年XX月XX日";
+    private String origin = "清华大学";
 
     public News(String title, String description, int pictureId, Boolean isRead) {
         this.title=title;
@@ -41,6 +43,10 @@ public class News implements Parcelable {
     }
 
     public Boolean getIsRead() { return isRead; }
+
+    public String getTime(){ return time; }
+
+    public String getOrigin(){ return origin; }
 
     @Override
     public int describeContents(){
