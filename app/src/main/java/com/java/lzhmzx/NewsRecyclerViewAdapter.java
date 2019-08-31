@@ -21,7 +21,6 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
     private List<News> newsList;
 
     public NewsRecyclerViewAdapter(Context context, List<News> newsList){
-        //TODO 注意参数顺序
         this.context = context;
         this.newsList = newsList;
     }
