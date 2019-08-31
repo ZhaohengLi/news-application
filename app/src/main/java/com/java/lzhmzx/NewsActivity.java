@@ -36,6 +36,7 @@ public class NewsActivity extends AppCompatActivity {
         setUpFloatingActionButton();
         setUpNewsDetail();
         setUpButton();
+        operateHistory();
     }
 
     private void setUpStatusBar(){
@@ -115,22 +116,15 @@ public class NewsActivity extends AppCompatActivity {
     }
 
     public void operateFavorite(){
-        //TODO
-        if(markedAsFavorite){
-
-        }else{
-
-        }
+        if(markedAsFavorite) DataHelper.addToFavorite(news);
+        else DataHelper.removeFromFavorite(news);
     }
 
     public void operateBlock(){
-        //TODO
-        if(markedAsBlock){
-
-        }else{
-
-        }
+        if(markedAsBlock) DataHelper.addToBlock(news);
+        else DataHelper.removeFromBlock(news);
     }
-
-
+    public void operateHistory(){
+        DataHelper.addToHistory(news);
+    }
 }

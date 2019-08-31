@@ -118,4 +118,88 @@ public class DataHelper {
         channelList.add("社会");
         return channelList;
     }
+
+    public static ArrayList<String> getChannelArrayListAdded(){
+        ArrayList<String> channelArrayListAdded = new ArrayList<>();
+        channelArrayListAdded = new ArrayList<>(Arrays.asList("娱乐","军事","教育","文化","健康","财经","体育","汽车","科技","社会"));
+        //todo
+        return channelArrayListAdded;
+    }
+
+    public static ArrayList<String> getChannelArrayListNotAdded(){
+        ArrayList<String> channelArrayListNotAdded = new ArrayList<>();
+        //todo
+        return channelArrayListNotAdded;
+    }
+
+    public static void setChannelArrayListAdded(ArrayList<String> channelArrayListAdded){
+        //todo
+        return;
+    }
+
+    public static void setChannelArrayListNotAdded(ArrayList<String> channelArrayListNotAdded){
+        //todo
+        return;
+    }
+
+    public static ArrayList<News> getNewsArrayList(String channel){
+        ArrayList<News> newsArrayList = new ArrayList<>();
+        if(channel.equals("娱乐")) newsArrayList.add(new News("Dallas police HQ attack: Suspect believed killed during standoff",text,R.mipmap.news_one, false));
+        if(channel.equals("军事")) newsArrayList.add(new News("Hugh Jackman says coffee can change the world",text,R.mipmap.news_two,true));
+        if(channel.equals("教育")) newsArrayList.add(new News("Australia in charge of second Test against West Indies in Jamaica",text,R.mipmap.news_three,true));
+        if(channel.equals("文化")) newsArrayList.add(new News("Sweden royal wedding","Australia in charge of second Test against West Indies in Jamaica",R.mipmap.news_four,false));
+        return newsArrayList;
+    }
+
+    public static ArrayList<News> getFavoriteArrayList(){
+        ArrayList<News> newsArrayList = new ArrayList<>();
+        //传全局变量的引用
+        return newsArrayList;
+    }
+
+    public static ArrayList<News> getHistoryArrayList(){
+        ArrayList<News> newsArrayList = new ArrayList<>();
+        //传全局变量的引用
+        return newsArrayList;
+    }
+
+    public static void addToFavorite(News news){
+
+    }
+    public static void removeFromFavorite(News news){
+
+    }
+    public static void addToBlock(News news){
+
+    }
+    public static void removeFromBlock(News news){
+
+    }
+    public static void addToHistory(News news){
+
+    }
+
+    public static ArrayList<News> getRecommendArrayList(){
+        ArrayList<News> newsArrayList = new ArrayList<>();
+        return newsArrayList;
+    }
+
+    public static ArrayList<HistorySuggestion> getHistorySuggestionArrayList(){
+        ArrayList<HistorySuggestion> historySuggestionArrayList = new ArrayList<>();
+        historySuggestionArrayList.add(new HistorySuggestion("first"));
+        historySuggestionArrayList.add(new HistorySuggestion("second"));
+        historySuggestionArrayList.add(new HistorySuggestion("third"));
+        return historySuggestionArrayList;
+    }
+
+    public static void addToHistorySuggestion(HistorySuggestion historySuggestion){
+        //检查之前是否存在 存在要删除
+        //新加入的历史记录放在末尾就好
+    }
+
+    public static ArrayList<News> getSearchResultArrayList(String keyword){
+        ArrayList<News> newsArrayList = new ArrayList<>();
+        //传全局变量的引用
+        return newsArrayList;
+    }
 }

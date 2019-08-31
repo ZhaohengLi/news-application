@@ -8,6 +8,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.view.View;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -34,28 +35,22 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final int REQUEST_FOR_CHANGE_TAB = 1;
+
     private ArrayList<News> newsArrayList = new ArrayList<>();
-
-    //设置TabLayout
     private TabLayout tabLayout;
-
     private RecyclerView recyclerView;
     private NewsRecyclerViewAdapter newsRecyclerViewAdapter;
     private LinearLayoutManager linearLayoutManager;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         setContentView(R.layout.activity_main);
         setUpStatusBar();
         init();
-
-        newsArrayList = DataHelper.getDataExamples();
-
+        setUpRecyclerView();//newsArrayList一开始是初始化好的空的list
         setUpTabLayout();
-        setUpRecyclerView();
     }
 
     private void init(){
@@ -85,16 +80,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void setUpTabLayout(){
-        ArrayList<String> category = new ArrayList<>(Arrays.asList("娱乐","军事","教育","文化","健康","财经","体育","汽车","科技","社会"));
+        ArrayList<String> channelArrayList = DataHelper.getChannelArrayListAdded();
         tabLayout = findViewById(R.id.tab_layout);
-        for(String cat : category){
-            tabLayout.addTab(tabLayout.newTab().setText(cat));
-        }
+        tabLayout.removeAllTabs();
+        for(String channel : channelArrayList){tabLayout.addTab(tabLayout.newTab().setText(channel));}
+        newsRecyclerViewAdapter.swapData(DataHelper.getNewsArrayList(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString()));
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                //TODO switch news
                 Toast.makeText(MainActivity.this, tab.getText(), Toast.LENGTH_LONG).show();
+                newsRecyclerViewAdapter.swapData(DataHelper.getNewsArrayList(tab.getText().toString()));
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {}
@@ -133,6 +129,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_FOR_CHANGE_TAB && resultCode == RESULT_OK){
+            setUpTabLayout();
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -159,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent intent = new Intent(MainActivity.this, ChannelActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent,REQUEST_FOR_CHANGE_TAB);
             return true;
         }else if(id == R.id.action_night_mode){
             int mode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;

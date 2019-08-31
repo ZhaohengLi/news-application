@@ -27,8 +27,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class ChannelActivity extends AppCompatActivity {
-    ArrayList<String> arrayListAdded = new ArrayList<>();
-    ArrayList<String> arrayListNotAdded = new ArrayList<>();
+    ArrayList<String> arrayListAdded;
+    ArrayList<String> arrayListNotAdded;
 
     RecyclerView recyclerViewAdded, recyclerViewNotAdded;
     ChannelRecyclerViewAdapter channelRecyclerViewAdapterAdded, channelRecyclerViewAdapterNotAdded;
@@ -46,8 +46,8 @@ public class ChannelActivity extends AppCompatActivity {
     }
 
     public void setUpData(){
-        arrayListAdded = DataHelper.getSampleChannelList();
-        arrayListNotAdded = DataHelper.getSampleChannelList();
+        arrayListAdded = DataHelper.getChannelArrayListAdded();
+        arrayListNotAdded = DataHelper.getChannelArrayListNotAdded();
     }
 
     private void setUpStatusBar(){
@@ -108,8 +108,6 @@ public class ChannelActivity extends AppCompatActivity {
         ItemTouchHelperCallback itemTouchHelperCallback = new ItemTouchHelperCallback(channelRecyclerViewAdapterAdded);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
         itemTouchHelper.attachToRecyclerView(recyclerViewAdded);
-
-
     }
 
     private void addChannel(int position){
@@ -125,10 +123,12 @@ public class ChannelActivity extends AppCompatActivity {
     }
 
     private void saveChannel(){
+        DataHelper.setChannelArrayListAdded(arrayListAdded);
+        DataHelper.setChannelArrayListNotAdded(arrayListNotAdded);
         Intent intent = new Intent(ChannelActivity.this, MainActivity.class);
-        startActivity(intent);
+        setResult(RESULT_OK, intent);
+        finish();
     }
-
 }
 
 

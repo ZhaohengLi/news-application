@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class RecommendActivity extends AppCompatActivity {
 
-    private ArrayList<News> newsArrayList = new ArrayList<>();
+    private ArrayList<News> newsArrayList;
 
     private RecyclerView recyclerView;
     private NewsRecyclerViewAdapter newsRecyclerViewAdapter;
@@ -33,7 +33,7 @@ public class RecommendActivity extends AppCompatActivity {
 
         setUpFloatingActionButton();
 
-        newsArrayList = DataHelper.getDataExamples();
+        newsArrayList = DataHelper.getRecommendArrayList();
 
         setUpRecyclerView();
     }
@@ -49,7 +49,7 @@ public class RecommendActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "已为您更新推荐的内容！", Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show();
-                newsRecyclerViewAdapter.clearData();
+                newsRecyclerViewAdapter.swapData(DataHelper.getRecommendArrayList());
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

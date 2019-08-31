@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class SearchActivity extends AppCompatActivity {
     //搜索相关
     private FloatingSearchView mSearchView;
-    private ArrayList<HistorySuggestion> historySuggestionArrayList = new ArrayList<>();
+    private ArrayList<HistorySuggestion> historySuggestionArrayList;
     private String lastQuery = "";
 
     //新闻列表相关
@@ -32,13 +32,11 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-
         mSearchView = findViewById(R.id.floating_search_view);
 
         setUpRecyclerView();
-        setUpHistorySuggestion();
+        historySuggestionArrayList = DataHelper.getHistorySuggestionArrayList();
         setUpFloatingSearchView();
     }
 
@@ -53,51 +51,33 @@ public class SearchActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
     }
 
-    public void setUpHistorySuggestion(){
-        this.historySuggestionArrayList.add(new HistorySuggestion("first"));
-        this.historySuggestionArrayList.add(new HistorySuggestion("second"));
-        this.historySuggestionArrayList.add(new HistorySuggestion("third"));
-    }
-
     private void setUpFloatingSearchView(){
         mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
             @Override
             public void onSuggestionClicked(final SearchSuggestion searchSuggestion) {
+                lastQuery = searchSuggestion.getBody();
                 mSearchView.clearFocus();
-                if(!lastQuery.equals(searchSuggestion.getBody())){
-                    historySuggestionArrayList.remove(searchSuggestion);
-                    lastQuery = searchSuggestion.getBody();
-                    historySuggestionArrayList.add((HistorySuggestion) searchSuggestion);
-                }
-                mSearchView.setSearchBarTitle(searchSuggestion.getBody());
                 Search(searchSuggestion.getBody());
             }
             @Override
             public void onSearchAction(String query) {
-                if(!lastQuery.equals(query)){
-                    //TODO 删除之前的重复项
-                    lastQuery = query;
-                    historySuggestionArrayList.add(new HistorySuggestion(query));
-                }
-                mSearchView.setSearchBarTitle(query);
+                lastQuery = query;
+                mSearchView.clearFocus();
                 Search(query);
             }
         });
-
         mSearchView.setOnFocusChangeListener(new FloatingSearchView.OnFocusChangeListener() {
             @Override
             public void onFocus() {
                 mSearchView.clearSuggestions();//如果不加入这个clearSuggestion和下面那个clearSuggestion 显示顺序会有问题 不要删
-                mSearchView.swapSuggestions(historySuggestionArrayList);
+                mSearchView.swapSuggestions(DataHelper.getHistorySuggestionArrayList());
             }
             @Override
             public void onFocusCleared() {
                 mSearchView.clearSuggestions();//如果不加入这个clearSuggestion和上面那个clearSuggestion 显示顺序会有问题 不要删
                 mSearchView.setSearchBarTitle(lastQuery);
-
             }
         });
-
         mSearchView.setOnHomeActionClickListener(
                 new FloatingSearchView.OnHomeActionClickListener() {
                     @Override
@@ -109,7 +89,8 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void Search(String keyword){
-        newsRecyclerViewAdapter.swapData(DataHelper.getDataExamples());
+        newsRecyclerViewAdapter.swapData(DataHelper.getSearchResultArrayList(keyword));
+        DataHelper.addToHistorySuggestion(new HistorySuggestion(keyword));
     }
 }
 

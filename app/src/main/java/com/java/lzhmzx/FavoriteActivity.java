@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class FavoriteActivity extends AppCompatActivity {
 
-    private ArrayList<News> newsArrayList = new ArrayList<>();
+    private ArrayList<News> newsArrayList;
 
     private RecyclerView recyclerView;
     private NewsRecyclerViewAdapter newsRecyclerViewAdapter;
@@ -30,11 +30,8 @@ public class FavoriteActivity extends AppCompatActivity {
         setUpStatusBar();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         setUpFloatingActionButton();
-
-        newsArrayList = DataHelper.getDataExamples();
-
+        newsArrayList = DataHelper.getFavoriteArrayList();
         setUpRecyclerView();
     }
 
@@ -52,6 +49,7 @@ public class FavoriteActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
                                 newsRecyclerViewAdapter.clearData();
+                                //如果传入的是全局变量的引用 那么便无需其他操作
                                 Snackbar.make(view, "已为您清空收藏的内容！", Snackbar.LENGTH_LONG).show();
                             }
                         }).show();
