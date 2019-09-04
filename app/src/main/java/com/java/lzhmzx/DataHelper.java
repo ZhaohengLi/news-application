@@ -158,14 +158,39 @@ public class DataHelper {
         return newsArrayList;
     }
 
+    public static ArrayList<News> getRefreshedNewsArrayList(String channel){
+        ArrayList<News> newsArrayList = new ArrayList<>();
+        newsArrayList.add(new News("这是我刷新时候添加的新闻",text,R.mipmap.news_one, false));
+        newsArrayList.add(new News("这是我刷新时候添加的新闻",text,R.mipmap.news_one, false));
+        newsArrayList.add(new News("这是我刷新时候添加的新闻",text,R.mipmap.news_one, false));
+        return newsArrayList;
+        //如果有更新的新闻就获取更新的新闻，传回的list将替代原来的lisi，
+        //如果没有更新的新闻，就留空，ui部分看到空list会保持原来的list不变
+    }
+
+    public static ArrayList<News> getMoreNewsArrayList(String channel){
+        ArrayList<News> newsArrayList = new ArrayList<>();
+        newsArrayList.add(new News("这是我加载更多时候添加的新闻",text,R.mipmap.news_one, false));
+        newsArrayList.add(new News("这是我加载更多时候添加的新闻",text,R.mipmap.news_one, false));
+        newsArrayList.add(new News("这是我加载更多时候添加的新闻",text,R.mipmap.news_one, false));
+        newsArrayList.add(new News("这是我加载更多时候添加的新闻",text,R.mipmap.news_one, false));
+        newsArrayList.add(new News("这是我加载更多时候添加的新闻",text,R.mipmap.news_one, false));
+        return newsArrayList;
+        //传回的list ui部分将逐个news追加到原有list 所以我觉得每次返回5、6个新闻就差不多了
+    }
+
     public static ArrayList<News> getFavoriteArrayList(){
         ArrayList<News> newsArrayList = new ArrayList<>();
+        newsArrayList.add(new News("Hugh Jackman says coffee can change the world",text,R.mipmap.news_two,true));
+
         //传全局变量的引用
         return newsArrayList;
     }
 
     public static ArrayList<News> getHistoryArrayList(){
         ArrayList<News> newsArrayList = new ArrayList<>();
+        newsArrayList.add(new News("Hugh Jackman says coffee can change the world",text,R.mipmap.news_two,true));
+
         //传全局变量的引用
         return newsArrayList;
     }

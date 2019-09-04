@@ -32,6 +32,7 @@ import android.view.Menu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -123,14 +124,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onRefresh(TwinklingRefreshLayout refreshLayout) {
                 super.onRefresh(refreshLayout);
-                Toast.makeText(MainActivity.this, "refreshing", Toast.LENGTH_LONG).show();
-                twinklingRefreshLayout.finishRefreshing();
+                ArrayList<News> refreshedNewsArrayList = DataHelper.getRefreshedNewsArrayList(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString());
+                if (refreshedNewsArrayList.size() != 0){
+                    newsRecyclerViewAdapter.swapData(refreshedNewsArrayList);
+                    twinklingRefreshLayout.finishRefreshing();
+                    Toast.makeText(MainActivity.this, "已为你更新新闻列表", Toast.LENGTH_SHORT).show();
+                }else{
+                    twinklingRefreshLayout.finishRefreshing();
+                    Toast.makeText(MainActivity.this, "暂时没有更新的新闻", Toast.LENGTH_SHORT).show();
+                }
+
             }
             @Override
             public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
                 super.onLoadMore(refreshLayout);
-                Toast.makeText(MainActivity.this, "loadmore", Toast.LENGTH_LONG).show();
-                twinklingRefreshLayout.finishLoadmore();
+                ArrayList<News> moreNewsArrayList = DataHelper.getMoreNewsArrayList(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString());
+                if (moreNewsArrayList.size() != 0){
+                    for (News news : moreNewsArrayList) newsRecyclerViewAdapter.addData(news);
+                    twinklingRefreshLayout.finishLoadmore();
+                    Toast.makeText(MainActivity.this, "已为你找到更多新闻", Toast.LENGTH_SHORT).show();
+                }else{
+                    twinklingRefreshLayout.finishLoadmore();
+                    Toast.makeText(MainActivity.this, "暂时没有更多新闻", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -187,7 +204,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
