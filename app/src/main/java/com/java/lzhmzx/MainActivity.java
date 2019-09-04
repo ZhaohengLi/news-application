@@ -16,6 +16,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
@@ -28,14 +29,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final int REQUEST_FOR_CHANGE_TAB = 1;
+    public static final int REQUEST_FOR_LOGIN = 2;
 
     private ArrayList<News> newsArrayList = new ArrayList<>();
     private TabLayout tabLayout;
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         setUpStatusBar();
         init();
+        setUserInfo();
         setUpRecyclerView();//newsArrayList一开始是初始化好的空的list
         setUpTabLayout();
     }
@@ -73,6 +76,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void setUserInfo(){
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        TextView userName = navigationView.getHeaderView(0).findViewById(R.id.text_view_user_name);
+        userName.setText(DataHelper.getUserName());
     }
 
     private void setUpStatusBar(){
@@ -130,8 +139,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_FOR_CHANGE_TAB && resultCode == RESULT_OK){
-            setUpTabLayout();
+        switch(requestCode){
+            case(REQUEST_FOR_CHANGE_TAB):
+                if (resultCode == RESULT_OK) setUpTabLayout();
+                break;
+            case(REQUEST_FOR_LOGIN):
+                if (resultCode == RESULT_OK) setUpTabLayout();
+                break;
         }
     }
 
@@ -156,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+
             Intent intent = new Intent(MainActivity.this, ChannelActivity.class);
             startActivityForResult(intent,REQUEST_FOR_CHANGE_TAB);
             return true;
@@ -179,7 +194,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_account) {
-            //TODO my account
+            Intent intent = new Intent(MainActivity.this, AccountActivity.class);
+            startActivityForResult(intent, REQUEST_FOR_LOGIN);
         } else if (id == R.id.nav_favorite) {
             Intent intent = new Intent(MainActivity.this, FavoriteActivity.class);
             startActivity(intent);
@@ -190,6 +206,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, RecommendActivity.class);
             startActivity(intent);
         }
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

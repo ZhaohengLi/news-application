@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:orientation="vertical"
+    tools:context=".ChannelActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="登录你的账户"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="35dp" />
+
+    <EditText
+        android:id="@+id/edit_text_user_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
+        android:hint="用户名"
+        android:textColor="@color/colorTextTitle"
+        android:textColorHint="@color/colorTextDescription"
+        android:maxLines="1"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
+
+    <EditText
+        android:id="@+id/edit_text_user_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
+        android:hint="密码"
+        android:textColor="@color/colorTextTitle"
+        android:textColorHint="@color/colorTextDescription"
+        android:inputType="textPassword"
+        android:maxLines="1"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/button_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:text="取消"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16dp"
+            android:textAlignment="center"
+            android:layout_toLeftOf="@id/button_confirm"/>
+        <Button
+            android:id="@+id/button_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:text="确认"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16dp"
+            android:textAlignment="center"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
+
+
+</LinearLayout>

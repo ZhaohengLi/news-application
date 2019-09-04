@@ -209,4 +209,21 @@ public class DataHelper {
         //传全局变量的引用
         return newsArrayList;
     }
+
+    public static Boolean isLoggedIn(){
+        return true;
+    }
+    public static Boolean logOut(){
+        return false;
+    }
+    public static Boolean logIn(String userName, String userPassword){
+        return true;
+    }
+    public static Boolean Register(String userName, String userPassword){
+        return false;
+    }
+    public static String getUserName(){
+        return "清华大学";
+    }
+
 }

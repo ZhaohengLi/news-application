@@ -10,5 +10,6 @@
     <string name="title_activity_favorite">FavoriteActivity</string>
     <string name="title_activity_history">HistoryActivity</string>
     <string name="title_activity_recommend">RecommendActivity</string>
+    <string name="title_activity_login">LoginActivity</string>
 
 </resources>
