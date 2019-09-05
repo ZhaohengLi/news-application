@@ -94,12 +94,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabLayout = findViewById(R.id.tab_layout);
         tabLayout.removeAllTabs();
         for(String channel : channelArrayList){tabLayout.addTab(tabLayout.newTab().setText(channel));}
-        newsRecyclerViewAdapter.swapData(DataHelper.getNewsArrayList(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString()));
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final ArrayList<News> tempNewsArrayList = DataHelper.getNewsArrayList(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        newsRecyclerViewAdapter.swapData(tempNewsArrayList);
+                    }
+                });
+            }
+        }).start();
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                newsRecyclerViewAdapter.swapData(DataHelper.getNewsArrayList(tab.getText().toString()));
+            public void onTabSelected(final TabLayout.Tab tab) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final ArrayList<News> tempNewsArrayList = DataHelper.getNewsArrayList(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                newsRecyclerViewAdapter.swapData(tempNewsArrayList);
+                            }
+                        });
+                    }
+                }).start();
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {}

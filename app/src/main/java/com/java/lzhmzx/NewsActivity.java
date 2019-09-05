@@ -18,8 +18,6 @@ import android.widget.VideoView;
 
 public class NewsActivity extends AppCompatActivity {
 
-    private Boolean markedAsFavorite = false;
-    private Boolean markedAsBlock = false;
     private News news = new News();
 
     @Override
@@ -27,10 +25,11 @@ public class NewsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
 
-        setUpStatusBar();
+        news = getIntent().getParcelableExtra("News");
 
-        setUpFloatingActionButton();
+        setUpStatusBar();
         setUpNewsDetail();
+        setUpFloatingActionButton();
         setUpButton();
         operateHistory();
     }
@@ -46,20 +45,18 @@ public class NewsActivity extends AppCompatActivity {
     public void setUpFloatingActionButton(){
         final FloatingActionButton fabFavorite = findViewById(R.id.fab_favorite);
 
-        if(markedAsFavorite) fabFavorite.setImageDrawable(getDrawable(R.drawable.ic_favorite));
+        if(news.getIsFavorite()) fabFavorite.setImageDrawable(getDrawable(R.drawable.ic_favorite));
         else fabFavorite.setImageDrawable(getDrawable(R.drawable.ic_favorite_border));
 
         fabFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(markedAsFavorite){
+                if(news.getIsFavorite()){
                     Snackbar.make(view, "已取消收藏此新闻！", Snackbar.LENGTH_LONG).show();
-                    markedAsFavorite = false;
                     operateFavorite();
                     fabFavorite.setImageDrawable(getDrawable(R.drawable.ic_favorite_border));
                 }else{
                     Snackbar.make(view, "已收藏此新闻！", Snackbar.LENGTH_LONG).show();
-                    markedAsFavorite = true;
                     operateFavorite();
                     fabFavorite.setImageDrawable(getDrawable(R.drawable.ic_favorite));
                 }
@@ -75,8 +72,6 @@ public class NewsActivity extends AppCompatActivity {
         TextView newsTime = findViewById(R.id.news_time);
         TextView newsOrigin = findViewById(R.id.news_origin);
         VideoView videoView = NewsActivity.this.findViewById(R.id.news_video);
-
-        news = getIntent().getParcelableExtra("News");
 
         newsPicture.setImageResource(news.getPictureId());
         newsTitle.setText(news.getTitle());
@@ -94,7 +89,7 @@ public class NewsActivity extends AppCompatActivity {
         final Button buttonShare = findViewById(R.id.btn_share);
         final Button buttonBlock = findViewById(R.id.btn_block);
 
-        if(markedAsBlock) buttonBlock.setText("已屏蔽类似的新闻");
+        if(news.getIsBlocked()) buttonBlock.setText("已屏蔽类似的新闻");
         else buttonBlock.setText("屏蔽类似的新闻");
 
         buttonShare.setOnClickListener(new View.OnClickListener() {
@@ -106,14 +101,12 @@ public class NewsActivity extends AppCompatActivity {
         buttonBlock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(markedAsBlock){
+                if(news.getIsBlocked()){
                     Snackbar.make(view, "已取消屏蔽类似的新闻！", Snackbar.LENGTH_LONG).show();
-                    markedAsBlock = false;
                     operateBlock();
                     buttonBlock.setText("屏蔽类似的新闻");
                 }else{
                     Snackbar.make(view, "已屏蔽类似的新闻！", Snackbar.LENGTH_LONG).show();
-                    markedAsBlock = true;
                     operateBlock();
                     buttonBlock.setText("已屏蔽类似的新闻");
                 }
@@ -122,13 +115,15 @@ public class NewsActivity extends AppCompatActivity {
     }
 
     public void operateFavorite(){
-        if(markedAsFavorite) DataHelper.addToFavorite(news);
+        if(news.getIsFavorite()) DataHelper.addToFavorite(news);
         else DataHelper.removeFromFavorite(news);
+        news.changeFavorite();
     }
 
     public void operateBlock(){
-        if(markedAsBlock) DataHelper.addToBlock(news);
+        if(news.getIsBlocked()) DataHelper.addToBlock(news);
         else DataHelper.removeFromBlock(news);
+        news.changeBlock();
     }
     public void operateHistory(){
         DataHelper.addToHistory(news);

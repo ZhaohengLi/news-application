@@ -1,8 +1,18 @@
 package com.java.lzhmzx;
 
+import android.net.UrlQuerySanitizer;
+import android.os.StrictMode;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.net.*;
 
 public class DataHelper {
 
@@ -94,7 +104,6 @@ public class DataHelper {
             "        \"For example, position the FAB to one side of stream of a cards so the FAB won’t interfere \"\n" +
             "        \"when a user tries to pick up one of cards.\\n\\n\"";
 
-
     public static ArrayList<News> getDataExamples(){
         ArrayList<News> newsArrayList = new ArrayList<>();
         newsArrayList.add(new News("Dallas police HQ attack: Suspect believed killed during standoff",text,R.mipmap.news_one, false));
@@ -142,8 +151,52 @@ public class DataHelper {
         return;
     }
 
+    private static User curUser = new User();
+    //访问服务器并获得资源
+    public static ArrayList<News> reqNews(final String size, final String startDate, final String endDate, final String words, final String categories){
+        ArrayList<News> ret = new ArrayList<>();
+        try {
+            String request_url = "https://api2.newsminer.net/svc/news/queryNewsList?";
+            request_url += "size=" + size;
+            request_url += "&startDate=" + startDate;
+            request_url += "&endDate=" + endDate;
+            request_url += "&words=" + words;
+            request_url += "&categories=" + categories;
+//            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//
+//            StrictMode.setThreadPolicy(policy);
+            System.out.println(request_url);
+            URL url = new URL(request_url);
+            InputStreamReader isr = new InputStreamReader(url.openStream(), "UTF-8");
+            System.out.println("reached.");
+            BufferedReader input = new BufferedReader(isr);
+            StringBuilder result = new StringBuilder();
+            String inputLine;
+            while((inputLine = input.readLine()) != null){
+                result.append(inputLine);
+            }
+            input.close();
+
+            String JsonStr = result.toString();
+            System.out.println("return " + JsonStr.length() + " words");
+            JSONObject newsJson = new JSONObject(new JSONTokener(JsonStr));
+            JSONArray JsonNewsArray = newsJson.getJSONArray("data");
+            for (int i = 0; i < JsonNewsArray.length(); i++) {
+                JSONObject JsonNews = JsonNewsArray.getJSONObject(i);
+                News tNews = new News(JsonNews);
+                //tNews.show();
+                ret.add(tNews);
+            }
+        }catch(Exception e){
+            System.out.println(e);
+        }
+
+        return ret;
+    }
+
+
     public static ArrayList<News> getNewsArrayList(String channel){
-        ArrayList<News> newsArrayList = new ArrayList<>();
+       /* ArrayList<News> newsArrayList = new ArrayList<>();
         if(channel.equals("娱乐")) {
             newsArrayList.add(new News("Dallas police HQ attack: Suspect believed killed during standoff",text,R.mipmap.news_one, false));
             newsArrayList.add(new News("Hugh Jackman says coffee can change the world",text,R.mipmap.news_two,true));
@@ -155,84 +208,107 @@ public class DataHelper {
         }
         if(channel.equals("教育")) newsArrayList.add(new News("Australia in charge of second Test against West Indies in Jamaica",text,R.mipmap.news_three,true));
         if(channel.equals("文化")) newsArrayList.add(new News("Sweden royal wedding","Australia in charge of second Test against West Indies in Jamaica",R.mipmap.news_four,false));
-        return newsArrayList;
+        */
+        return curUser.get(channel);
+
     }
 
     public static ArrayList<News> getRefreshedNewsArrayList(String channel){
-        ArrayList<News> newsArrayList = new ArrayList<>();
+        /*ArrayList<News> newsArrayList = new ArrayList<>();
         newsArrayList.add(new News("这是我刷新时候添加的新闻",text,R.mipmap.news_one, false));
         newsArrayList.add(new News("这是我刷新时候添加的新闻",text,R.mipmap.news_one, false));
         newsArrayList.add(new News("这是我刷新时候添加的新闻",text,R.mipmap.news_one, false));
-        return newsArrayList;
+        return newsArrayList;*/
+        return curUser.refresh(channel);
         //如果有更新的新闻就获取更新的新闻，传回的list将替代原来的lisi，
         //如果没有更新的新闻，就留空，ui部分看到空list会保持原来的list不变
     }
 
     public static ArrayList<News> getMoreNewsArrayList(String channel){
-        ArrayList<News> newsArrayList = new ArrayList<>();
+        /*ArrayList<News> newsArrayList = new ArrayList<>();
         newsArrayList.add(new News("这是我加载更多时候添加的新闻",text,R.mipmap.news_one, false));
         newsArrayList.add(new News("这是我加载更多时候添加的新闻",text,R.mipmap.news_one, false));
         newsArrayList.add(new News("这是我加载更多时候添加的新闻",text,R.mipmap.news_one, false));
         newsArrayList.add(new News("这是我加载更多时候添加的新闻",text,R.mipmap.news_one, false));
         newsArrayList.add(new News("这是我加载更多时候添加的新闻",text,R.mipmap.news_one, false));
-        return newsArrayList;
+        return newsArrayList;*/
+        return curUser.loadMore(channel);
         //传回的list ui部分将逐个news追加到原有list 所以我觉得每次返回5、6个新闻就差不多了
     }
 
     public static ArrayList<News> getFavoriteArrayList(){
-        ArrayList<News> newsArrayList = new ArrayList<>();
+        /*ArrayList<News> newsArrayList = new ArrayList<>();
         newsArrayList.add(new News("Hugh Jackman says coffee can change the world",text,R.mipmap.news_two,true));
 
         //传全局变量的引用
-        return newsArrayList;
+        return newsArrayList;*/
+        return curUser.favoriteList;
     }
 
     public static ArrayList<News> getHistoryArrayList(){
-        ArrayList<News> newsArrayList = new ArrayList<>();
+        /*ArrayList<News> newsArrayList = new ArrayList<>();
         newsArrayList.add(new News("Hugh Jackman says coffee can change the world",text,R.mipmap.news_two,true));
-
+        */
         //传全局变量的引用
-        return newsArrayList;
+        return curUser.historyList;
     }
 
     public static void addToFavorite(News news){
-
+        curUser.favoriteList.add(news);
     }
     public static void removeFromFavorite(News news){
-
+        String nID = news.getNewsID();
+        for(int i = 0; i < curUser.favoriteList.size(); i++) {
+            if (curUser.favoriteList.get(i).getNewsID().equals(nID)) {
+                curUser.favoriteList.remove(i);
+                break;
+            }
+        }
     }
     public static void addToBlock(News news){
-
+        curUser.blockList.add(news);
     }
     public static void removeFromBlock(News news){
-
+        String nID = news.getNewsID();
+        for(int i = 0; i < curUser.blockList.size(); i++) {
+            if (curUser.blockList.get(i).getNewsID().equals(nID)) {
+                curUser.blockList.remove(i);
+                break;
+            }
+        }
     }
     public static void addToHistory(News news){
-
+        curUser.historyList.add(news);
     }
 
     public static ArrayList<News> getRecommendArrayList(){
-        ArrayList<News> newsArrayList = new ArrayList<>();
-        return newsArrayList;
+        return curUser.recommendList;
     }
 
     public static ArrayList<HistorySuggestion> getHistorySuggestionArrayList(){
-        ArrayList<HistorySuggestion> historySuggestionArrayList = new ArrayList<>();
+        /*ArrayList<HistorySuggestion> historySuggestionArrayList = new ArrayList<>();
         historySuggestionArrayList.add(new HistorySuggestion("first"));
         historySuggestionArrayList.add(new HistorySuggestion("second"));
         historySuggestionArrayList.add(new HistorySuggestion("third"));
-        return historySuggestionArrayList;
+        return historySuggestionArrayList;*/
+        return curUser.searchHistory;
     }
 
     public static void addToHistorySuggestion(HistorySuggestion historySuggestion){
         //检查之前是否存在 存在要删除
         //新加入的历史记录放在末尾就好
+        String body = historySuggestion.getBody();
+        for(int i = 0; i < curUser.searchHistory.size(); i++) {
+            if (curUser.searchHistory.get(i).getBody().equals(body)) {
+                curUser.searchHistory.remove(i);
+                break;
+            }
+        }
+        curUser.searchHistory.add(historySuggestion);
     }
 
     public static ArrayList<News> getSearchResultArrayList(String keyword){
-        ArrayList<News> newsArrayList = new ArrayList<>();
-        //传全局变量的引用
-        return newsArrayList;
+        return curUser.searchResult;
     }
 
     public static Boolean isLoggedIn(){
