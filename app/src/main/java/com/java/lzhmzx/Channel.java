@@ -23,11 +23,15 @@ public class Channel {
         return this.name;
     }
 
-    public ArrayList<News> refresh(){
+    public ArrayList<News> refresh(Map<String, News> newsMap){
         displayNews = new ArrayList<>();
         System.out.println("refresh " + this.name);
-        savedNews = DataHelper.reqNews("","","","",this.name);
+        savedNews = DataHelper.reqNews("","","2019-9-6","",this.name);
         displayIndex = savedNews.size() - 1;
+        for(int i = 0; i < savedNews.size(); i++){
+            News temp = savedNews.get(i);
+            newsMap.put(temp.getNewsID(), temp);
+        }
 
         for(int i = 0; i < originSize && displayIndex >= 0; i++){
             displayNews.add(savedNews.get(displayIndex));
@@ -37,12 +41,12 @@ public class Channel {
         return displayNews;
     }
 
-    public ArrayList<News> get(){
+    public ArrayList<News> get(Map<String, News> newsMap){
         System.out.println("get " + this.name);
         if(savedNews.size() == 0){
-            return refresh();
+            return refresh(newsMap);
         } else {
-            return savedNews;
+            return displayNews;
         }
     }
 

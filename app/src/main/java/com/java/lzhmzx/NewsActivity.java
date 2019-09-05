@@ -18,7 +18,7 @@ import android.widget.VideoView;
 
 public class NewsActivity extends AppCompatActivity {
 
-    private News news = new News();
+    private News news;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,6 @@ public class NewsActivity extends AppCompatActivity {
         setUpNewsDetail();
         setUpFloatingActionButton();
         setUpButton();
-        operateHistory();
     }
 
     private void setUpStatusBar(){
@@ -115,17 +114,10 @@ public class NewsActivity extends AppCompatActivity {
     }
 
     public void operateFavorite(){
-        if(news.getIsFavorite()) DataHelper.addToFavorite(news);
-        else DataHelper.removeFromFavorite(news);
-        news.changeFavorite();
+        DataHelper.changeFavorite(news.getNewsID());
     }
 
     public void operateBlock(){
-        if(news.getIsBlocked()) DataHelper.addToBlock(news);
-        else DataHelper.removeFromBlock(news);
-        news.changeBlock();
-    }
-    public void operateHistory(){
-        DataHelper.addToHistory(news);
+        DataHelper.changeBlock(news.getNewsID());
     }
 }

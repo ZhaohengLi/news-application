@@ -185,8 +185,14 @@ public class DataHelper {
                 JSONObject JsonNews = JsonNewsArray.getJSONObject(i);
                 News tNews = new News(JsonNews);
                 //tNews.show();
-                ret.add(tNews);
+                News aNews = curUser.newsMap.get(tNews.getNewsID());
+                if(aNews != null){
+                    ret.add(aNews);
+                } else {
+                    ret.add(tNews);
+                }
             }
+            System.out.println(ret.size());
         }catch(Exception e){
             System.out.println(e);
         }
@@ -250,13 +256,19 @@ public class DataHelper {
         newsArrayList.add(new News("Hugh Jackman says coffee can change the world",text,R.mipmap.news_two,true));
         */
         //传全局变量的引用
-        return curUser.historyList;
+        ArrayList<News> ret = new ArrayList<>();
+        for(int i = curUser.historyList.size()-1; i >= 0; i--){
+            ret.add(curUser.historyList.get(i));
+        }
+        return ret;
     }
 
     public static void addToFavorite(News news){
+        System.out.println("Add " + news.getNewsID());
         curUser.favoriteList.add(news);
     }
     public static void removeFromFavorite(News news){
+        System.out.println("Remove " + news.getNewsID());
         String nID = news.getNewsID();
         for(int i = 0; i < curUser.favoriteList.size(); i++) {
             if (curUser.favoriteList.get(i).getNewsID().equals(nID)) {
@@ -265,6 +277,17 @@ public class DataHelper {
             }
         }
     }
+
+    public static void changeFavorite(String newsID){
+        News temp = curUser.newsMap.get(newsID);
+        if(temp.getIsFavorite()){
+            removeFromFavorite(temp);
+        } else {
+            addToFavorite(temp);
+        }
+        temp.changeFavorite();
+    }
+
     public static void addToBlock(News news){
         curUser.blockList.add(news);
     }
@@ -277,8 +300,27 @@ public class DataHelper {
             }
         }
     }
-    public static void addToHistory(News news){
-        curUser.historyList.add(news);
+
+    public static void changeBlock(String newsID){
+        News temp = curUser.newsMap.get(newsID);
+        if(temp.getIsBlocked()){
+            removeFromBlock(temp);
+        } else {
+            addToBlock(temp);
+        }
+        temp.changeBlock();
+    }
+
+    public static void addToHistory(String newsID){
+        News temp = curUser.newsMap.get(newsID);
+        for(int i = 0; i < curUser.historyList.size(); i++) {
+            if (curUser.historyList.get(i).getNewsID().equals(newsID)) {
+                curUser.historyList.remove(i);
+                break;
+            }
+        }
+        curUser.historyList.add(temp);
+        if(!temp.getIsRead()) temp.changeRead();
     }
 
     public static ArrayList<News> getRecommendArrayList(){

@@ -54,7 +54,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
     }
 
     @Override
-    public void onBindViewHolder(NewsRecyclerViewAdapter.NewsViewHolder newsViewHolder, final int position){
+    public void onBindViewHolder(final NewsRecyclerViewAdapter.NewsViewHolder newsViewHolder, final int position){
         newsViewHolder.newPicture.setImageResource(newsList.get(position).getPictureId());
         newsViewHolder.newsTitle.setText(newsList.get(position).getTitle());
         newsViewHolder.newsDescription.setText(newsList.get(position).getDescription());
@@ -69,6 +69,8 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
         newsViewHolder.cardView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
+                DataHelper.addToHistory(newsList.get(position).getNewsID());
+                newsViewHolder.markedAsRead.setVisibility(View.VISIBLE);
                 Intent intent = new Intent(context, NewsActivity.class);
                 intent.putExtra("News", newsList.get(position));
                 context.startActivity(intent);
@@ -78,6 +80,8 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
         newsViewHolder.readMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DataHelper.addToHistory(newsList.get(position).getNewsID());
+                newsViewHolder.markedAsRead.setVisibility(View.VISIBLE);
                 Intent intent = new Intent(context, NewsActivity.class);
                 intent.putExtra("News", newsList.get(position));
                 context.startActivity(intent);

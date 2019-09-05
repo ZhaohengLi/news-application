@@ -9,14 +9,14 @@ public class News implements Parcelable {
     private String title = "新闻标题";
     private String description = "新闻描述";
     private int pictureId = -1;
-    private Boolean isRead = false;
+    private boolean isRead = false;
+    private boolean isFavorite = false;
+    private boolean isBlocked = false;
     private String time = "XXXX年XX月XX日";
     private String origin = "清华大学";
     private String newsID;
-    private Boolean isFavorite;
-    private Boolean isBlocked;
 
-    public News(String title, String description, int pictureId, Boolean isRead) {
+    public News(String title, String description, int pictureId, boolean isRead) {
         this.title=title;
         this.description=description;
         this.pictureId=pictureId;
@@ -31,6 +31,7 @@ public class News implements Parcelable {
         this.isBlocked = false;
         this.time = JsonNews.getString("publishTime");
         this.newsID = JsonNews.getString("newsID");
+        this.origin = JsonNews.getString("publisher");
     }
     public News(){}
 
@@ -71,11 +72,13 @@ public class News implements Parcelable {
 
     public String getNewsID(){return this.newsID;}
 
-    public Boolean getIsRead() { return isRead; }
+    public boolean getIsRead() { return isRead; }
 
-    public Boolean getIsFavorite(){ return this.isFavorite;}
+    public boolean getIsFavorite(){ return this.isFavorite;}
 
-    public Boolean getIsBlocked(){ return this.isBlocked;}
+    public boolean getIsBlocked(){ return this.isBlocked;}
+
+    public void changeRead() {this.isRead = !this.isRead;}
 
     public void changeFavorite(){ this.isFavorite = !this.isFavorite;}
 
@@ -94,6 +97,12 @@ public class News implements Parcelable {
         parcel.writeString(title);
         parcel.writeString(description);
         parcel.writeInt(pictureId);
+        parcel.writeByte((byte) (isRead?1:0));
+        parcel.writeByte((byte) (isFavorite?1:0));
+        parcel.writeByte((byte) (isBlocked?1:0));
+        parcel.writeString(time);
+        parcel.writeString(origin);
+        parcel.writeString(newsID);
     }
 
     public static final Parcelable.Creator<News> CREATOR = new Creator<News>() {
@@ -102,6 +111,12 @@ public class News implements Parcelable {
             news.title = source.readString();
             news.description = source.readString();
             news.pictureId = source.readInt();
+            news.isRead = source.readByte() != 0;
+            news.isFavorite = source.readByte() != 0;
+            news.isBlocked = source.readByte() != 0;
+            news.time = source.readString();
+            news.origin = source.readString();
+            news.newsID = source.readString();
             return news;
         }
         public News[] newArray(int size) {

@@ -16,6 +16,7 @@ public class User {
     public ArrayList<News> searchResult;
 
     public ArrayList<Channel> channelList;
+    public Map<String, News> newsMap;
 
     User(){
         name = "temp_user";
@@ -26,6 +27,7 @@ public class User {
         blockedKeywords = new ArrayList<>();
         searchHistory = new ArrayList<>();
         channelList = new ArrayList<>();
+        newsMap = new HashMap<>();
         channelList.add(new Channel("娱乐"));
         channelList.add(new Channel("军事"));
         channelList.add(new Channel("教育"));
@@ -42,18 +44,20 @@ public class User {
         for(int i = 0; i < this.channelList.size(); i++){
             Channel curChannel = this.channelList.get(i);
             if(curChannel.getName().equals(channelName)){
-                return curChannel.get();
+                return curChannel.get(newsMap);
             }
         }
         return new ArrayList<News>();
     }
     public ArrayList<News> refresh(final String channelName){
-        for(int i = 0; i < this.channelList.size(); i++){
+
+        for(int i = 0; i < this.channelList.size(); i++) {
             Channel curChannel = this.channelList.get(i);
-            if(curChannel.getName().equals(channelName)){
-                return curChannel.refresh();
+            if (curChannel.getName().equals(channelName)) {
+                return curChannel.refresh(newsMap);
             }
         }
+
         return new ArrayList<News>();
     }
     public ArrayList<News> loadMore(final String channelName){

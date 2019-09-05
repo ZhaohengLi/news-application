@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -111,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(final TabLayout.Tab tab) {
+                recyclerView.setVisibility(View.INVISIBLE);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -123,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         });
                     }
                 }).start();
+                recyclerView.setVisibility(View.VISIBLE);
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {}
