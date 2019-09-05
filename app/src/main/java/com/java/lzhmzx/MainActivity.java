@@ -124,30 +124,50 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onRefresh(TwinklingRefreshLayout refreshLayout) {
                 super.onRefresh(refreshLayout);
-                ArrayList<News> refreshedNewsArrayList = DataHelper.getRefreshedNewsArrayList(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString());
-                if (refreshedNewsArrayList.size() != 0){
-                    newsRecyclerViewAdapter.swapData(refreshedNewsArrayList);
-                    twinklingRefreshLayout.finishRefreshing();
-                    Toast.makeText(MainActivity.this, "已为你更新新闻列表", Toast.LENGTH_SHORT).show();
-                }else{
-                    twinklingRefreshLayout.finishRefreshing();
-                    Toast.makeText(MainActivity.this, "暂时没有更新的新闻", Toast.LENGTH_SHORT).show();
-                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final ArrayList<News> refreshedNewsArrayList = DataHelper.getRefreshedNewsArrayList(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString());
 
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (refreshedNewsArrayList.size() != 0){
+                                    newsRecyclerViewAdapter.swapData(refreshedNewsArrayList);
+                                    twinklingRefreshLayout.finishRefreshing();
+                                    Toast.makeText(MainActivity.this, "已为你更新新闻列表", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    twinklingRefreshLayout.finishRefreshing();
+                                    Toast.makeText(MainActivity.this, "暂时没有更新的新闻", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+                }).start();
             }
             @Override
             public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
                 super.onLoadMore(refreshLayout);
-                ArrayList<News> moreNewsArrayList = DataHelper.getMoreNewsArrayList(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString());
-                if (moreNewsArrayList.size() != 0){
-                    for (News news : moreNewsArrayList) newsRecyclerViewAdapter.addData(news);
-                    twinklingRefreshLayout.finishLoadmore();
-                    Toast.makeText(MainActivity.this, "已为你找到更多新闻", Toast.LENGTH_SHORT).show();
-                }else{
-                    twinklingRefreshLayout.finishLoadmore();
-                    Toast.makeText(MainActivity.this, "暂时没有更多新闻", Toast.LENGTH_SHORT).show();
-                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final ArrayList<News> moreNewsArrayList = DataHelper.getMoreNewsArrayList(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (moreNewsArrayList.size() != 0){
+                                    newsRecyclerViewAdapter.swapData(moreNewsArrayList);
+                                    twinklingRefreshLayout.finishLoadmore();
+                                    Toast.makeText(MainActivity.this, "已为你找到更多新闻", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    twinklingRefreshLayout.finishLoadmore();
+                                    Toast.makeText(MainActivity.this, "暂时没有更多新闻", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
 
+                    }
+                }).start();
             }
         });
 
