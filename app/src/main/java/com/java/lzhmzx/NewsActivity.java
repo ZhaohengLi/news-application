@@ -72,7 +72,11 @@ public class NewsActivity extends AppCompatActivity {
         TextView newsOrigin = findViewById(R.id.news_origin);
         VideoView videoView = NewsActivity.this.findViewById(R.id.news_video);
 
-        newsPicture.setImageResource(news.getPictureId());
+        if(news.image != null) {
+            newsPicture.setImageBitmap(news.image);
+        } else {
+            newsPicture.setImageResource(news.getPictureId());
+        }
         newsTitle.setText(news.getTitle());
         newsDescription.setText(news.getDescription());
         newsTime.setText("于 "+news.getTime());

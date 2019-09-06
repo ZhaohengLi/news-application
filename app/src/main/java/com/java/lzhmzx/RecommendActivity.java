@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class RecommendActivity extends AppCompatActivity {
 
-    private ArrayList<News> newsArrayList;
+    private ArrayList<News> newsArrayList = new ArrayList<>();
 
     private RecyclerView recyclerView;
     private NewsRecyclerViewAdapter newsRecyclerViewAdapter;
@@ -30,12 +30,24 @@ public class RecommendActivity extends AppCompatActivity {
         setUpStatusBar();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         setUpFloatingActionButton();
-
-        newsArrayList = DataHelper.getRecommendArrayList();
-
         setUpRecyclerView();
+
+        Snackbar.make(getWindow().getDecorView().findViewById(R.id.recycler_view), "正在为你挑选内容 请稍后", Snackbar.LENGTH_LONG).show();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final ArrayList<News> tempNewsArrayList = DataHelper.getRecommendArrayList();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        newsRecyclerViewAdapter.swapData(tempNewsArrayList);
+                        Snackbar.make(getWindow().getDecorView().findViewById(R.id.recycler_view), "已为你更新推荐的内容", Snackbar.LENGTH_SHORT).show();
+
+                    }
+                });
+            }
+        }).start();
     }
 
     private void setUpStatusBar(){
@@ -46,10 +58,21 @@ public class RecommendActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "已为您更新推荐的内容！", Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
-                newsRecyclerViewAdapter.swapData(DataHelper.getRecommendArrayList());
+            public void onClick(final View view) {
+                Snackbar.make(view, "正在为你挑选内容 请稍后", Snackbar.LENGTH_LONG).show();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final ArrayList<News> tempNewsArrayList = DataHelper.getRecommendArrayList();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                newsRecyclerViewAdapter.swapData(tempNewsArrayList);
+                                Snackbar.make(view, "已为你更新推荐的内容", Snackbar.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }).start();
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -65,4 +88,5 @@ public class RecommendActivity extends AppCompatActivity {
         recyclerView.setAdapter(newsRecyclerViewAdapter);
         recyclerView.setLayoutManager(linearLayoutManager);
     }
+
 }

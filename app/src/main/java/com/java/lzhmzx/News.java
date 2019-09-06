@@ -1,4 +1,5 @@
 package com.java.lzhmzx;
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -15,6 +16,9 @@ public class News implements Parcelable {
     private String time = "XXXX年XX月XX日";
     private String origin = "清华大学";
     private String newsID;
+    public String keywords;
+    public String imageUrl;
+    public Bitmap image;
 
     public News(String title, String description, int pictureId, boolean isRead) {
         this.title=title;
@@ -30,8 +34,16 @@ public class News implements Parcelable {
         this.isFavorite = false;
         this.isBlocked = false;
         this.time = JsonNews.getString("publishTime");
-        this.newsID = JsonNews.getString("newsID");
         this.origin = JsonNews.getString("publisher");
+        this.newsID = JsonNews.getString("newsID");
+        this.keywords = JsonNews.getJSONArray("keywords").getJSONObject(0).getString("word");
+        this.imageUrl = JsonNews.getString("image");
+        this.imageUrl = this.imageUrl.substring(1, this.imageUrl.length()-1);
+        int temp = this.imageUrl.indexOf(',');
+        if(temp >= 0){
+            this.imageUrl = this.imageUrl.substring(0, temp);
+        }
+        image = null;
     }
     public News(){}
 

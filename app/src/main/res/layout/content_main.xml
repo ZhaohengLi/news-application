@@ -18,7 +18,8 @@
         app:tabBackground="@color/colorCardBackground"
         app:tabIndicatorColor="@color/colorPrimary"
         app:tabIndicatorHeight="2dp"
-        app:tabSelectedTextColor="@color/colorPrimary" />
+        app:tabSelectedTextColor="@color/colorPrimary"
+        android:background="@color/colorBackground"/>
 
     <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
         android:id="@+id/refresh_layout"

@@ -22,6 +22,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -62,6 +64,10 @@ public class ChannelActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(arrayListAdded.size() < 1) {
+                    Snackbar.make(getWindow().getDecorView().findViewById(R.id.recycler_view_added), "至少选择一个频道", Snackbar.LENGTH_LONG).show();
+                    return;
+                }
                 saveChannel();
             }
         });
@@ -87,7 +93,6 @@ public class ChannelActivity extends AppCompatActivity {
                 new RecyclerViewClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-//                        Toast.makeText(ChannelActivity.this,"Click "+arrayListAdded.get(position),Toast.LENGTH_SHORT).show();
                         deleteChannel(position);
                     }
                     @Override
@@ -98,7 +103,6 @@ public class ChannelActivity extends AppCompatActivity {
                 new RecyclerViewClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-//                        Toast.makeText(ChannelActivity.this,"Click "+arrayListAdded.get(position),Toast.LENGTH_SHORT).show();
                         addChannel(position);
                     }
                     @Override

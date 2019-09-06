@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerViewAdapter.NewsViewHolder> {
@@ -55,7 +56,11 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
 
     @Override
     public void onBindViewHolder(final NewsRecyclerViewAdapter.NewsViewHolder newsViewHolder, final int position){
-        newsViewHolder.newPicture.setImageResource(newsList.get(position).getPictureId());
+        if(newsList.get(position).image != null) {
+            newsViewHolder.newPicture.setImageBitmap(newsList.get(position).image);
+        } else {
+            newsViewHolder.newPicture.setImageResource(newsList.get(position).getPictureId());
+        }
         newsViewHolder.newsTitle.setText(newsList.get(position).getTitle());
         newsViewHolder.newsDescription.setText(newsList.get(position).getDescription());
         newsViewHolder.newsTime.setText(newsList.get(position).getTime());
@@ -130,4 +135,5 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
         this.newsList.clear();
         notifyDataSetChanged();
     }
+
 }

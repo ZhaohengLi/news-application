@@ -1,13 +1,25 @@
 package com.java.lzhmzx;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.UrlQuerySanitizer;
+import android.os.Bundle;
+import android.os.FileUtils;
 import android.os.StrictMode;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,102 +28,7 @@ import java.net.*;
 
 public class DataHelper {
 
-    public static String text = "\"Material is the metaphor.\\n\\n\"\n" +
-            "\n" +
-            "        \"A material metaphor is the unifying theory of a rationalized space and a system of motion.\"\n" +
-            "        \"The material is grounded in tactile reality, inspired by the study of paper and ink, yet \"\n" +
-            "        \"technologically advanced and open to imagination and magic.\\n\"\n" +
-            "        \"Surfaces and edges of the material provide visual cues that are grounded in reality. The \"\n" +
-            "        \"use of familiar tactile attributes helps users quickly understand affordances. Yet the \"\n" +
-            "        \"flexibility of the material creates new affordances that supercede those in the physical \"\n" +
-            "        \"world, without breaking the rules of physics.\\n\"\n" +
-            "        \"The fundamentals of light, surface, and movement are key to conveying how objects move, \"\n" +
-            "        \"interact, and exist in space and in relation to each other. Realistic lighting shows \"\n" +
-            "        \"seams, divides space, and indicates moving parts.\\n\\n\"\n" +
-            "\n" +
-            "        \"Bold, graphic, intentional.\\n\\n\"\n" +
-            "\n" +
-            "        \"The foundational elements of print based design typography, grids, space, scale, color, \"\n" +
-            "        \"and use of imagery guide visual treatments. These elements do far more than please the \"\n" +
-            "        \"eye. They create hierarchy, meaning, and focus. Deliberate color choices, edge to edge \"\n" +
-            "        \"imagery, large scale typography, and intentional white space create a bold and graphic \"\n" +
-            "        \"interface that immerse the user in the experience.\\n\"\n" +
-            "        \"An emphasis on user actions makes core functionality immediately apparent and provides \"\n" +
-            "        \"waypoints for the user.\\n\\n\"\n" +
-            "\n" +
-            "        \"Motion provides meaning.\\n\\n\"\n" +
-            "\n" +
-            "        \"Motion respects and reinforces the user as the prime mover. Primary user actions are \"\n" +
-            "        \"inflection points that initiate motion, transforming the whole design.\\n\"\n" +
-            "        \"All action takes place in a single environment. Objects are presented to the user without \"\n" +
-            "        \"breaking the continuity of experience even as they transform and reorganize.\\n\"\n" +
-            "        \"Motion is meaningful and appropriate, serving to focus attention and maintain continuity. \"\n" +
-            "        \"Feedback is subtle yet clear. Transitions are efﬁcient yet coherent.\\n\\n\"\n" +
-            "\n" +
-            "        \"3D world.\\n\\n\"\n" +
-            "\n" +
-            "        \"The material environment is a 3D space, which means all objects have x, y, and z \"\n" +
-            "        \"dimensions. The z-axis is perpendicularly aligned to the plane of the display, with the \"\n" +
-            "        \"positive z-axis extending towards the viewer. Every sheet of material occupies a single \"\n" +
-            "        \"position along the z-axis and has a standard 1dp thickness.\\n\"\n" +
-            "        \"On the web, the z-axis is used for layering and not for perspective. The 3D world is \"\n" +
-            "        \"emulated by manipulating the y-axis.\\n\\n\"\n" +
-            "\n" +
-            "        \"Light and shadow.\\n\\n\"\n" +
-            "\n" +
-            "        \"Within the material environment, virtual lights illuminate the scene. Key lights create \"\n" +
-            "        \"directional shadows, while ambient light creates soft shadows from all angles.\\n\"\n" +
-            "        \"Shadows in the material environment are cast by these two light sources. In Android \"\n" +
-            "        \"development, shadows occur when light sources are blocked by sheets of material at \"\n" +
-            "        \"various positions along the z-axis. On the web, shadows are depicted by manipulating the \"\n" +
-            "        \"y-axis only. The following example shows the card with a height of 6dp.\\n\\n\"\n" +
-            "\n" +
-            "        \"Resting elevation.\\n\\n\"\n" +
-            "\n" +
-            "        \"All material objects, regardless of size, have a resting elevation, or default elevation \"\n" +
-            "        \"that does not change. If an object changes elevation, it should return to its resting \"\n" +
-            "        \"elevation as soon as possible.\\n\\n\"\n" +
-            "\n" +
-            "        \"Component elevations.\\n\\n\"\n" +
-            "\n" +
-            "        \"The resting elevation for a component type is consistent across apps (e.g., FAB elevation \"\n" +
-            "        \"does not vary from 6dp in one app to 16dp in another app).\\n\"\n" +
-            "        \"Components may have different resting elevations across platforms, depending on the depth \"\n" +
-            "        \"of the environment (e.g., TV has a greater depth than mobile or desktop).\\n\\n\"\n" +
-            "\n" +
-            "        \"Responsive elevation and dynamic elevation offsets.\\n\\n\"\n" +
-            "\n" +
-            "        \"Some component types have responsive elevation, meaning they change elevation in response \"\n" +
-            "        \"to user input (e.g., normal, focused, and pressed) or system events. These elevation \"\n" +
-            "        \"changes are consistently implemented using dynamic elevation offsets.\\n\"\n" +
-            "        \"Dynamic elevation offsets are the goal elevation that a component moves towards, relative \"\n" +
-            "        \"to the component’s resting state. They ensure that elevation changes are consistent \"\n" +
-            "        \"across actions and component types. For example, all components that lift on press have \"\n" +
-            "        \"the same elevation change relative to their resting elevation.\\n\"\n" +
-            "        \"Once the input event is completed or cancelled, the component will return to its resting \"\n" +
-            "        \"elevation.\\n\\n\"\n" +
-            "\n" +
-            "        \"Avoiding elevation interference.\\n\\n\"\n" +
-            "\n" +
-            "        \"Components with responsive elevations may encounter other components as they move between \"\n" +
-            "        \"their resting elevations and dynamic elevation offsets. Because material cannot pass \"\n" +
-            "        \"through other material, components avoid interfering with one another any number of ways, \"\n" +
-            "        \"whether on a per component basis or using the entire app layout.\\n\"\n" +
-            "        \"On a component level, components can move or be removed before they cause interference. \"\n" +
-            "        \"For example, a floating action button (FAB) can disappear or move off screen before a \"\n" +
-            "        \"user picks up a card, or it can move if a snackbar appears.\\n\"\n" +
-            "        \"On the layout level, design your app layout to minimize opportunities for interference. \"\n" +
-            "        \"For example, position the FAB to one side of stream of a cards so the FAB won’t interfere \"\n" +
-            "        \"when a user tries to pick up one of cards.\\n\\n\"";
-
-    public static ArrayList<News> getDataExamples(){
-        ArrayList<News> newsArrayList = new ArrayList<>();
-        newsArrayList.add(new News("Dallas police HQ attack: Suspect believed killed during standoff",text,R.mipmap.news_one, false));
-        newsArrayList.add(new News("Hugh Jackman says coffee can change the world",text,R.mipmap.news_two,true));
-        newsArrayList.add(new News("Australia in charge of second Test against West Indies in Jamaica",text,R.mipmap.news_three,true));
-        newsArrayList.add(new News("Sweden royal wedding","Australia in charge of second Test against West Indies in Jamaica",R.mipmap.news_four,false));
-        return newsArrayList;
-    }
+    public static FileUtilities fileUtilities;
 
     public static ArrayList<String> getSampleChannelList(){
         ArrayList<String> channelList = new ArrayList<>();
@@ -129,29 +46,23 @@ public class DataHelper {
     }
 
     public static ArrayList<String> getChannelArrayListAdded(){
-        ArrayList<String> channelArrayListAdded = new ArrayList<>();
-        channelArrayListAdded = new ArrayList<>(Arrays.asList("娱乐","军事","教育","文化","健康","财经","体育","汽车","科技","社会"));
-        //todo
-        return channelArrayListAdded;
+        return curUser.channelNameList;
     }
 
     public static ArrayList<String> getChannelArrayListNotAdded(){
-        ArrayList<String> channelArrayListNotAdded = new ArrayList<>();
-        //todo
-        return channelArrayListNotAdded;
+        return curUser.channelHidenNameList;
     }
 
     public static void setChannelArrayListAdded(ArrayList<String> channelArrayListAdded){
-        //todo
-        return;
+        curUser.channelNameList = channelArrayListAdded;
     }
 
     public static void setChannelArrayListNotAdded(ArrayList<String> channelArrayListNotAdded){
-        //todo
-        return;
+        curUser.channelHidenNameList = channelArrayListNotAdded;
     }
 
     private static User curUser = new User();
+
     //访问服务器并获得资源
     public static ArrayList<News> reqNews(final String size, final String startDate, final String endDate, final String words, final String categories){
         ArrayList<News> ret = new ArrayList<>();
@@ -162,9 +73,6 @@ public class DataHelper {
             request_url += "&endDate=" + endDate;
             request_url += "&words=" + words;
             request_url += "&categories=" + categories;
-//            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-//
-//            StrictMode.setThreadPolicy(policy);
             System.out.println(request_url);
             URL url = new URL(request_url);
             InputStreamReader isr = new InputStreamReader(url.openStream(), "UTF-8");
@@ -189,6 +97,15 @@ public class DataHelper {
                 if(aNews != null){
                     ret.add(aNews);
                 } else {
+                    if(tNews.imageUrl.length() > 1) {
+                        try {
+                           /* fileUtilities.save(tNews.getNewsID()+".news", tNews.getTitle());
+                            String text = fileUtilities.read(tNews.getNewsID()+".news");
+                            System.out.println(text);*/
+                            /*fileUtilities.savePicture(tNews.getNewsID()+".news", fileUtilities.getPictureFromURL(tNews.imageUrl));
+                            tNews.image = fileUtilities.readPicture(tNews.getNewsID()+".news");*/
+                        } catch(Exception e){ }
+                    }
                     ret.add(tNews);
                 }
             }
@@ -202,59 +119,22 @@ public class DataHelper {
 
 
     public static ArrayList<News> getNewsArrayList(String channel){
-       /* ArrayList<News> newsArrayList = new ArrayList<>();
-        if(channel.equals("娱乐")) {
-            newsArrayList.add(new News("Dallas police HQ attack: Suspect believed killed during standoff",text,R.mipmap.news_one, false));
-            newsArrayList.add(new News("Hugh Jackman says coffee can change the world",text,R.mipmap.news_two,true));
-            newsArrayList.add(new News("Australia in charge of second Test against West Indies in Jamaica",text,R.mipmap.news_three,true));
-        }
-        if(channel.equals("军事")) {
-            newsArrayList.add(new News("Hugh Jackman says coffee can change the world",text,R.mipmap.news_two,true));
-            newsArrayList.add(new News("Dallas police HQ attack: Suspect believed killed during standoff",text,R.mipmap.news_one, false));
-        }
-        if(channel.equals("教育")) newsArrayList.add(new News("Australia in charge of second Test against West Indies in Jamaica",text,R.mipmap.news_three,true));
-        if(channel.equals("文化")) newsArrayList.add(new News("Sweden royal wedding","Australia in charge of second Test against West Indies in Jamaica",R.mipmap.news_four,false));
-        */
         return curUser.get(channel);
-
-    }
+    }   
 
     public static ArrayList<News> getRefreshedNewsArrayList(String channel){
-        /*ArrayList<News> newsArrayList = new ArrayList<>();
-        newsArrayList.add(new News("这是我刷新时候添加的新闻",text,R.mipmap.news_one, false));
-        newsArrayList.add(new News("这是我刷新时候添加的新闻",text,R.mipmap.news_one, false));
-        newsArrayList.add(new News("这是我刷新时候添加的新闻",text,R.mipmap.news_one, false));
-        return newsArrayList;*/
         return curUser.refresh(channel);
-        //如果有更新的新闻就获取更新的新闻，传回的list将替代原来的lisi，
-        //如果没有更新的新闻，就留空，ui部分看到空list会保持原来的list不变
     }
 
     public static ArrayList<News> getMoreNewsArrayList(String channel){
-        /*ArrayList<News> newsArrayList = new ArrayList<>();
-        newsArrayList.add(new News("这是我加载更多时候添加的新闻",text,R.mipmap.news_one, false));
-        newsArrayList.add(new News("这是我加载更多时候添加的新闻",text,R.mipmap.news_one, false));
-        newsArrayList.add(new News("这是我加载更多时候添加的新闻",text,R.mipmap.news_one, false));
-        newsArrayList.add(new News("这是我加载更多时候添加的新闻",text,R.mipmap.news_one, false));
-        newsArrayList.add(new News("这是我加载更多时候添加的新闻",text,R.mipmap.news_one, false));
-        return newsArrayList;*/
         return curUser.loadMore(channel);
-        //传回的list ui部分将逐个news追加到原有list 所以我觉得每次返回5、6个新闻就差不多了
     }
 
     public static ArrayList<News> getFavoriteArrayList(){
-        /*ArrayList<News> newsArrayList = new ArrayList<>();
-        newsArrayList.add(new News("Hugh Jackman says coffee can change the world",text,R.mipmap.news_two,true));
-
-        //传全局变量的引用
-        return newsArrayList;*/
         return curUser.favoriteList;
     }
 
     public static ArrayList<News> getHistoryArrayList(){
-        /*ArrayList<News> newsArrayList = new ArrayList<>();
-        newsArrayList.add(new News("Hugh Jackman says coffee can change the world",text,R.mipmap.news_two,true));
-        */
         //传全局变量的引用
         ArrayList<News> ret = new ArrayList<>();
         for(int i = curUser.historyList.size()-1; i >= 0; i--){
@@ -324,7 +204,7 @@ public class DataHelper {
     }
 
     public static ArrayList<News> getRecommendArrayList(){
-        return curUser.recommendList;
+        return curUser.recommend();
     }
 
     public static ArrayList<HistorySuggestion> getHistorySuggestionArrayList(){
@@ -350,7 +230,7 @@ public class DataHelper {
     }
 
     public static ArrayList<News> getSearchResultArrayList(String keyword){
-        return curUser.searchResult;
+        return curUser.search(keyword);
     }
 
     public static Boolean isLoggedIn(){

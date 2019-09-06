@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -81,15 +82,25 @@ public class SearchActivity extends AppCompatActivity {
         mSearchView.setOnHomeActionClickListener(
                 new FloatingSearchView.OnHomeActionClickListener() {
                     @Override
-                    public void onHomeClicked() {
-                        Intent intent = new Intent(SearchActivity.this, MainActivity.class);
-                        SearchActivity.this.startActivity(intent);
-                    }
+                    public void onHomeClicked() { finish(); }
                 });
     }
 
-    public void Search(String keyword){
-        newsRecyclerViewAdapter.swapData(DataHelper.getSearchResultArrayList(keyword));
+    public void Search(final String keyword){
+        Snackbar.make(getWindow().getDecorView().findViewById(R.id.recycler_view), "正在为你搜索有关 "+keyword+" 的内容 请稍后", Snackbar.LENGTH_LONG).show();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final ArrayList<News> tempNewsArrayList = DataHelper.getSearchResultArrayList(keyword);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        newsRecyclerViewAdapter.swapData(tempNewsArrayList);
+                        Snackbar.make(getWindow().getDecorView().findViewById(R.id.recycler_view), "已向你展示 "+tempNewsArrayList.size()+"条 搜索到的内容", Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).start();
         DataHelper.addToHistorySuggestion(new HistorySuggestion(keyword));
     }
 }

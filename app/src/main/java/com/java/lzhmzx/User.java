@@ -15,6 +15,8 @@ public class User {
     public ArrayList<HistorySuggestion> searchHistory;
     public ArrayList<News> searchResult;
 
+    public ArrayList<String> channelNameList;
+    public ArrayList<String> channelHidenNameList;
     public ArrayList<Channel> channelList;
     public Map<String, News> newsMap;
 
@@ -28,6 +30,8 @@ public class User {
         searchHistory = new ArrayList<>();
         channelList = new ArrayList<>();
         newsMap = new HashMap<>();
+        channelNameList = new ArrayList<>(Arrays.asList("娱乐","军事","教育","文化","健康","财经","体育","汽车","科技","社会"));
+        channelHidenNameList = new ArrayList<>();
         channelList.add(new Channel("娱乐"));
         channelList.add(new Channel("军事"));
         channelList.add(new Channel("教育"));
@@ -68,6 +72,25 @@ public class User {
             }
         }
         return new ArrayList<News>();
+    }
+
+    public ArrayList<News> search(final String keywords){
+        searchResult = DataHelper.reqNews("","","2019-9-6",keywords,"");
+        for(int i = 0; i < searchResult.size(); i++){
+            News temp = searchResult.get(i);
+            newsMap.put(temp.getNewsID(), temp);
+        }
+        return searchResult;
+    }
+
+    public ArrayList<News> recommend(){
+        String keywords = null;
+        if(favoriteList.size()>0){
+            Random r = new Random();
+            keywords = favoriteList.get(r.nextInt(favoriteList.size())).keywords;
+        }
+        recommendList = search(keywords);
+        return recommendList;
     }
 
 };

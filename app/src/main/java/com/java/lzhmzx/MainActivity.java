@@ -29,12 +29,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.io.*;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setUserInfo();
         setUpRecyclerView();//newsArrayList一开始是初始化好的空的list
         setUpTabLayout();
+        DataHelper.fileUtilities = new FileUtilities(MainActivity.this);
     }
 
     private void init(){
@@ -96,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabLayout.removeAllTabs();
         for(String channel : channelArrayList){tabLayout.addTab(tabLayout.newTab().setText(channel));}
 
+        Snackbar.make(getWindow().getDecorView().findViewById(R.id.recycler_view), "正在为你挑选内容 请稍后", Snackbar.LENGTH_LONG).show();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -104,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void run() {
                         newsRecyclerViewAdapter.swapData(tempNewsArrayList);
+                        Snackbar.make(getWindow().getDecorView().findViewById(R.id.recycler_view), "已为你更新内容", Snackbar.LENGTH_SHORT).show();
+
                     }
                 });
             }
@@ -112,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(final TabLayout.Tab tab) {
-                recyclerView.setVisibility(View.INVISIBLE);
+                Snackbar.make(getWindow().getDecorView().findViewById(R.id.recycler_view), "正在为您挑选内容 请稍后", Snackbar.LENGTH_LONG).show();
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -121,11 +125,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             @Override
                             public void run() {
                                 newsRecyclerViewAdapter.swapData(tempNewsArrayList);
+                                Snackbar.make(getWindow().getDecorView().findViewById(R.id.recycler_view), "已为你更新内容", Snackbar.LENGTH_SHORT).show();
                             }
                         });
                     }
                 }).start();
-                recyclerView.setVisibility(View.VISIBLE);
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {}
@@ -154,18 +158,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void run() {
                         final ArrayList<News> refreshedNewsArrayList = DataHelper.getRefreshedNewsArrayList(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString());
-
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (refreshedNewsArrayList.size() != 0){
-                                    newsRecyclerViewAdapter.swapData(refreshedNewsArrayList);
-                                    twinklingRefreshLayout.finishRefreshing();
-                                    Toast.makeText(MainActivity.this, "已为你更新新闻列表", Toast.LENGTH_SHORT).show();
-                                }else{
-                                    twinklingRefreshLayout.finishRefreshing();
-                                    Toast.makeText(MainActivity.this, "暂时没有更新的新闻", Toast.LENGTH_SHORT).show();
-                                }
+                                newsRecyclerViewAdapter.swapData(refreshedNewsArrayList);
+                                twinklingRefreshLayout.finishRefreshing();
+                                Snackbar.make(getWindow().getDecorView().findViewById(R.id.recycler_view), "已为你更新内容", Snackbar.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -181,14 +179,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (moreNewsArrayList.size() != 0){
-                                    newsRecyclerViewAdapter.swapData(moreNewsArrayList);
-                                    twinklingRefreshLayout.finishLoadmore();
-                                    Toast.makeText(MainActivity.this, "已为你找到更多新闻", Toast.LENGTH_SHORT).show();
-                                }else{
-                                    twinklingRefreshLayout.finishLoadmore();
-                                    Toast.makeText(MainActivity.this, "暂时没有更多新闻", Toast.LENGTH_SHORT).show();
-                                }
+                                newsRecyclerViewAdapter.swapData(moreNewsArrayList);
+                                twinklingRefreshLayout.finishLoadmore();
+                                Snackbar.make(getWindow().getDecorView().findViewById(R.id.recycler_view), "已为你加载更多内容", Snackbar.LENGTH_SHORT).show();
                             }
                         });
 

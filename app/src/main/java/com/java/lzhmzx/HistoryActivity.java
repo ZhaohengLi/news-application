@@ -30,33 +30,12 @@ public class HistoryActivity extends AppCompatActivity {
         setUpStatusBar();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setUpFloatingActionButton();
         newsArrayList = DataHelper.getHistoryArrayList();
         setUpRecyclerView();
     }
 
     private void setUpStatusBar(){
         getWindow().setStatusBarColor(Color.TRANSPARENT);
-    }
-
-    private void setUpFloatingActionButton(){
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "想要清空最近浏览过的内容？", Snackbar.LENGTH_LONG)
-                        .setAction("是的", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                newsRecyclerViewAdapter.clearData();
-                                //如果传入的是全局变量的引用 那么便无需其他操作
-                                Snackbar.make(view, "已为您清空最近浏览过的内容！", Snackbar.LENGTH_LONG).show();
-                            }
-                        }).show();
-
-            }
-        });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public void setUpRecyclerView(){
