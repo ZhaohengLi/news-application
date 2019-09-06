@@ -88,8 +88,18 @@ public class NewsActivity extends AppCompatActivity {
                 public void subscribe(ObservableEmitter<Bitmap> emitter) throws Exception {
                     //通过设置此方法的回调运行在子线程中，可以进行网络请求等一些耗时的操作
                     //比如请求网络拿到数据通过调用emitter.onNext(response);将请求的数据发送到下游
-                    emitter.onNext(FileUtilities.getPictureFromURL(news.getImageUrl()));
-                    emitter.onComplete();
+                    Bitmap bitmap = FileUtilities.readPicture(news.getNewsID()+".pic");
+                    if (bitmap!=null){
+                        System.out.println("In NewsActivity get pic from file.");
+                        emitter.onNext(bitmap);
+                        emitter.onComplete();
+                    }else{
+                        bitmap = FileUtilities.getPictureFromURL(news.getImageUrl());
+                        System.out.println("In NewsActivity get pic from internet.");
+                        FileUtilities.savePicture(news.getNewsID()+".pic",bitmap);
+                        emitter.onNext(bitmap);
+                        emitter.onComplete();
+                    }
                 }
             }).subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())

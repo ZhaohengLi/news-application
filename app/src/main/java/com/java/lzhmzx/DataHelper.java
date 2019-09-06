@@ -29,9 +29,7 @@ import java.net.*;
 
 public class DataHelper {
 
-    public static FileUtilities fileUtilities;
     private static User curUser = new User();
-
 
     public static ArrayList<String> getChannelArrayListAdded() {return curUser.channelNameList; }
 
@@ -61,7 +59,7 @@ public class DataHelper {
                     value.changeBlock();
                 }
             }
-            str = fileUtilities.read(userName + ".txt");
+            str = FileUtilities.read(userName + ".txt");
             System.out.println(str);
             String[] Lists = str.split("\n");
             curUser.historyList = new ArrayList<>();
@@ -73,7 +71,7 @@ public class DataHelper {
                     String newsID = curList[i];
                     News temp = curUser.newsMap.get(newsID);
                     if (temp == null) {
-                        temp = new News(fileUtilities.read(newsID + ".news"));
+                        temp = new News(FileUtilities.read(newsID + ".news"));
                         curUser.newsMap.put(newsID, temp);
                     }
                     if (!temp.getIsRead()) {
@@ -90,7 +88,7 @@ public class DataHelper {
                     String newsID = curList[i];
                     News temp = curUser.newsMap.get(newsID);
                     if(temp == null){
-                        temp = new News(fileUtilities.read(newsID + ".news"));
+                        temp = new News(FileUtilities.read(newsID + ".news"));
                         curUser.newsMap.put(newsID, temp);
                     }
                     if(!temp.getIsFavorite()){
@@ -107,7 +105,7 @@ public class DataHelper {
                     String newsID = curList[i];
                     News temp = curUser.newsMap.get(newsID);
                     if (temp == null) {
-                        temp = new News(fileUtilities.read(newsID + ".news"));
+                        temp = new News(FileUtilities.read(newsID + ".news"));
                         curUser.newsMap.put(newsID, temp);
                     }
                     if (!temp.getIsBlocked()) {
@@ -197,7 +195,7 @@ public class DataHelper {
             sb.append(strList.get(i));
         }
         try {
-            fileUtilities.save(curUser.name + ".txt", sb.toString());
+            FileUtilities.save(curUser.name + ".txt", sb.toString());
         } catch(Exception e){
 
         }
@@ -239,7 +237,7 @@ public class DataHelper {
                 } else {
                     ret.add(tNews);
                     try{
-                        fileUtilities.save(tNews.getNewsID()+".news", tNews.toString());
+                        FileUtilities.save(tNews.getNewsID()+".news", tNews.toString());
                     } catch(Exception e){
 
                     }
@@ -362,7 +360,7 @@ public class DataHelper {
 
     public static Boolean logIn(String userName, String userPassword){
         try{
-            String string = fileUtilities.read("users.txt");
+            String string = FileUtilities.read("user.list");
             String[] userNames = string.split("\n");
             for(String item : userNames){
                 if(userName.equals(item) && userPassword.equals(item)) {
@@ -370,23 +368,21 @@ public class DataHelper {
                     return true;
                 }
             }
-            return false;
         }catch (Exception e){
-            e.printStackTrace();
+            System.out.println("From LogIn "+e);
         }
         return false;
     }
 
-    public static String getUserName(){
-        return curUser.name;
-    }
+    public static String getUserName(){ return curUser.name; }
 
     public static void writeUserList(){
         try{
-            String string = "userlzh\n";
-            string += "usermzx\n";
-            fileUtilities.save("users.txt", string);
-        }catch (Exception e) {System.out.println(e);}
+            String string = "ZhaohengLi\n";
+            string += "ZixuanMin\n";
+            string += "ShikunChen";
+            FileUtilities.save("user.list", string);
+        }catch (Exception e) {System.out.println("From writeUserList "+e);}
     }
 
 }

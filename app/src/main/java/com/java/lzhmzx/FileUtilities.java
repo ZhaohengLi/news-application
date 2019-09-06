@@ -14,27 +14,30 @@ import java.security.spec.ECField;
 import javax.net.ssl.HttpsURLConnection;
 
 public class FileUtilities {
-    private Context mContext;
-    public FileUtilities() {}
+    public static Context mContext;
 
-    public FileUtilities(Context mContext) {
-        super();
-        this.mContext = mContext;
+    public static void save(String filename, String filecontent){
+        try{
+            FileOutputStream output = mContext.openFileOutput(filename, Context.MODE_PRIVATE);
+            output.write(filecontent.getBytes());
+            output.close();
+        }catch (Exception e){
+            System.out.println("From save txt file "+e);
+        }
+
+    }
+    public static void savePicture(String fileName, Bitmap bitmap) throws Exception{
+        try{
+            FileOutputStream fileOutputStream = mContext.openFileOutput(fileName, Context.MODE_PRIVATE);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100,fileOutputStream);
+            fileOutputStream.close();
+        }catch (Exception e){
+            System.out.println("From save picture file "+e);
+        }
+
     }
 
-    public void save(String filename, String filecontent) throws Exception {
-        FileOutputStream output = mContext.openFileOutput(filename, Context.MODE_PRIVATE);
-        output.write(filecontent.getBytes());
-        output.close();
-    }
-    public  void savePicture(String fileName, Bitmap bitmap) throws Exception{
-        FileOutputStream fileOutputStream = mContext.openFileOutput(fileName, Context.MODE_PRIVATE);
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100,fileOutputStream);
-        fileOutputStream.close();
-    }
-
-
-    public String read(String filename) throws IOException {
+    public static String read(String filename) throws IOException {
         FileInputStream input = mContext.openFileInput(filename);
         byte[] temp = new byte[1024];
         StringBuilder sb = new StringBuilder("");
@@ -46,9 +49,15 @@ public class FileUtilities {
         return sb.toString();
     }
 
-    public Bitmap readPicture(String fileName) throws IOException{
-        FileInputStream fileInputStream = new FileInputStream(fileName);
-        return BitmapFactory.decodeStream(fileInputStream);
+    public static Bitmap readPicture(String fileName){
+        Bitmap bitmap = null;
+        try {
+            FileInputStream fileInputStream = mContext.openFileInput(fileName);
+            bitmap = BitmapFactory.decodeStream(fileInputStream);
+        }catch(Exception e){
+            System.out.println("From read picture file "+e);
+        }
+        return bitmap;
     }
 
     public static Bitmap getPictureFromURL(String imageURL){
@@ -63,7 +72,7 @@ public class FileUtilities {
                 bitmap = BitmapFactory.decodeStream(inputStream);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("From read picture from URL "+e);
         }
         return bitmap;
     }

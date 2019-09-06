@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         init();
         setUpRecyclerView();//newsArrayList一开始是初始化好的空的list
         setUpTabLayout();
-        DataHelper.fileUtilities = new FileUtilities(MainActivity.this);
+        FileUtilities.mContext = MainActivity.this;
         DataHelper.writeUserList();
         DataHelper.changeUser("");
         setUserData();

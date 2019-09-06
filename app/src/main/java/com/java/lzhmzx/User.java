@@ -20,7 +20,7 @@ public class User {
     public Map<String, News> newsMap;
 
     User(){
-        name = "temp_user";
+        name = "VISITOR";
         password = "";
         historyList = new ArrayList<>();
         favoriteList = new ArrayList<>();

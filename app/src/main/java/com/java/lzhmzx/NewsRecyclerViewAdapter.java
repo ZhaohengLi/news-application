@@ -72,8 +72,18 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
                 public void subscribe(ObservableEmitter<Bitmap> emitter) throws Exception {
                     //通过设置此方法的回调运行在子线程中，可以进行网络请求等一些耗时的操作
                     //比如请求网络拿到数据通过调用emitter.onNext(response);将请求的数据发送到下游
-                    emitter.onNext(FileUtilities.getPictureFromURL(newsList.get(position).getImageUrl()));
-                    emitter.onComplete();
+                    Bitmap bitmap = FileUtilities.readPicture(newsList.get(position).getNewsID()+".pic");
+                    if (bitmap!=null){
+                        System.out.println("From onBindViewHolder Get pic from file.");
+                        emitter.onNext(bitmap);
+                        emitter.onComplete();
+                    }else{
+                        bitmap = FileUtilities.getPictureFromURL(newsList.get(position).getImageUrl());
+                        System.out.println("From onBindViewHolder Get pic from url.");
+                        FileUtilities.savePicture(newsList.get(position).getNewsID()+".pic",bitmap);
+                        emitter.onNext(bitmap);
+                        emitter.onComplete();
+                    }
                 }
             }).subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
