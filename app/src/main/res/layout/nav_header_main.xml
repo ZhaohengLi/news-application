@@ -16,19 +16,21 @@
         android:id="@+id/image_user"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="30dp"
         android:contentDescription="@string/nav_header_desc"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         app:srcCompat="@mipmap/icon" />
 
     <TextView
         android:id="@+id/text_view_user_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="用户名"
+        android:text="欢迎归来 ZhaohengLi"
         android:textSize="20dp"
-        android:textColor="@color/colorTextDescription"
-        android:layout_marginStart="50dp"/>
+        android:textColor="@color/colorPrimaryDark"/>
+
+
 
 </LinearLayout>

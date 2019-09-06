@@ -142,8 +142,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
                 intent.setType("image/jpg");
                 intent.putExtra(Intent.EXTRA_SUBJECT, "分享新闻 \""+newsList.get(position).getTitle()+"\"");
                 intent.putExtra(Intent.EXTRA_TEXT, newsList.get(position).getDescription());
-//                intent.putExtra(Intent.EXTRA_STREAM, )
-
+                intent.putExtra(Intent.EXTRA_STREAM, FileUtilities.readPicture(newsList.get(position).getNewsID()+".pic"));
                 context.startActivity(Intent.createChooser(intent,"新闻分享"));
             }
         });

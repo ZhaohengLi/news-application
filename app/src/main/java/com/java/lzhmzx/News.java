@@ -133,6 +133,8 @@ public class News implements Parcelable {
         return imageUrl;
     }
 
+    public String getVideoUrl(){ return  videoUrl; }
+
     public String getNewsID(){return this.newsID;}
 
     public boolean getIsRead() { return isRead; }

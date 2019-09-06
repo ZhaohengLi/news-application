@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setUserData(){
         NavigationView navigationView = findViewById(R.id.nav_view);
         TextView userName = navigationView.getHeaderView(0).findViewById(R.id.text_view_user_name);
-        userName.setText(DataHelper.getUserName());
+        userName.setText("欢迎归来 "+DataHelper.getUserName());
     }
 
     private void setUpStatusBar(){

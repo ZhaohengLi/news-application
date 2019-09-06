@@ -3,6 +3,7 @@ package com.java.lzhmzx;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -125,10 +126,14 @@ public class NewsActivity extends AppCompatActivity {
         newsTime.setText("于 "+news.getTime());
         newsOrigin.setText("来自 "+news.getOrigin()+" 的报道");
 
-        videoView.setMediaController(new MediaController(this));
-        videoView.setVideoPath(Environment.getExternalStorageDirectory().getPath() + "/hehe2.mp4");
-        videoView.start();
-        videoView.requestFocus();
+        if (news.getVideoUrl().length()>1){
+            System.out.println("Prepare to load video.");
+            videoView.setMediaController(new MediaController(this));
+            videoView.setVideoURI(Uri.parse(news.getVideoUrl()));
+            videoView.start();
+            videoView.requestFocus();
+        }
+
     }
 
     public void setUpButton(){
@@ -142,11 +147,10 @@ public class NewsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("image/jpg");
+                intent.setType("image/*");
                 intent.putExtra(Intent.EXTRA_SUBJECT, "分享新闻 \""+news.getTitle()+"\"");
                 intent.putExtra(Intent.EXTRA_TEXT, news.getDescription());
-//                intent.putExtra(Intent.EXTRA_STREAM, )
-
+                intent.putExtra(Intent.EXTRA_STREAM, FileUtilities.readPicture(news.getNewsID()+".pic"));
                 startActivity(Intent.createChooser(intent,"新闻分享"));
             }
         });
