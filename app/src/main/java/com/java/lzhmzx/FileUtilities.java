@@ -51,15 +51,8 @@ public class FileUtilities {
         return BitmapFactory.decodeStream(fileInputStream);
     }
 
-    public Bitmap getPictureFromURL(String imageURL){
+    public static Bitmap getPictureFromURL(String imageURL){
         Bitmap bitmap = null;
-//        try {
-//            InputStream inputStream = new URL(imageURL).openStream();
-//            bitmap = BitmapFactory.decodeStream(inputStream);
-//            inputStream.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
         try {
             URL url = new URL(imageURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -74,8 +67,4 @@ public class FileUtilities {
         }
         return bitmap;
     }
-
-
-
-
 }
