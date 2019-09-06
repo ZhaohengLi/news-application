@@ -158,9 +158,11 @@ public class NewsActivity extends AppCompatActivity {
 
     public void operateFavorite(){
         DataHelper.changeFavorite(news.getNewsID());
+        news.changeFavorite();
     }
 
     public void operateBlock(){
         DataHelper.changeBlock(news.getNewsID());
+        news.changeBlock();
     }
 }

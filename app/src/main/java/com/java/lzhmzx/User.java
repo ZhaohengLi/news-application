@@ -4,14 +4,13 @@ import java.util.*;
 
 public class User {
 
-    private String name;
+    public String name;
     private String password;
 
     public ArrayList<News> historyList;
     public ArrayList<News> favoriteList;
     public ArrayList<News> recommendList;
     public ArrayList<News> blockList;
-    public ArrayList<String> blockedKeywords;
     public ArrayList<HistorySuggestion> searchHistory;
     public ArrayList<News> searchResult;
 
@@ -26,7 +25,7 @@ public class User {
         historyList = new ArrayList<>();
         favoriteList = new ArrayList<>();
         recommendList = new ArrayList<>();
-        blockedKeywords = new ArrayList<>();
+        blockList = new ArrayList<>();
         searchHistory = new ArrayList<>();
         channelList = new ArrayList<>();
         newsMap = new HashMap<>();
@@ -44,11 +43,31 @@ public class User {
         channelList.add(new Channel("社会"));
     }
 
+
+
+    private ArrayList<News> block(ArrayList<News> displayList){
+        ArrayList<News> ret = new ArrayList<>();
+        for(int i = 0; i < displayList.size(); i++){
+            News temp = displayList.get(i);
+            boolean flag = true;
+            for(int j = 0; j < blockList.size(); j++){
+                if(temp.keywords.equals(blockList.get(j).keywords)){
+                    flag = false;
+                    break;
+                }
+            }
+            if(flag){
+                ret.add(temp);
+            }
+        }
+        return ret;
+    }
+
     public ArrayList<News> get(final String channelName){
         for(int i = 0; i < this.channelList.size(); i++){
             Channel curChannel = this.channelList.get(i);
             if(curChannel.getName().equals(channelName)){
-                return curChannel.get(newsMap);
+                return block(curChannel.get(newsMap));
             }
         }
         return new ArrayList<News>();
@@ -58,7 +77,7 @@ public class User {
         for(int i = 0; i < this.channelList.size(); i++) {
             Channel curChannel = this.channelList.get(i);
             if (curChannel.getName().equals(channelName)) {
-                return curChannel.refresh(newsMap);
+                return block(curChannel.refresh(newsMap));
             }
         }
 
@@ -68,7 +87,7 @@ public class User {
         for(int i = 0; i < this.channelList.size(); i++){
             Channel curChannel = this.channelList.get(i);
             if(curChannel.getName().equals(channelName)){
-                return curChannel.loadMore();
+                return block(curChannel.loadMore());
             }
         }
         return new ArrayList<News>();

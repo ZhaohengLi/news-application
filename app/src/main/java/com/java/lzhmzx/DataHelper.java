@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.security.spec.ECField;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,13 +33,175 @@ public class DataHelper {
     private static User curUser = new User();
 
 
-    public static ArrayList<String> getChannelArrayListAdded() { return curUser.channelNameList; }
+    public static ArrayList<String> getChannelArrayListAdded() {return curUser.channelNameList; }
 
-    public static ArrayList<String> getChannelArrayListNotAdded() { return curUser.channelHidenNameList; }
+    public static ArrayList<String> getChannelArrayListNotAdded() {return curUser.channelHidenNameList; }
 
-    public static void setChannelArrayListAdded(ArrayList<String> channelArrayListAdded) { curUser.channelNameList = channelArrayListAdded;}
+    public static void setChannelArrayListAdded(ArrayList<String> channelArrayListAdded) { curUser.channelNameList = channelArrayListAdded;userPrint();}
 
-    public static void setChannelArrayListNotAdded(ArrayList<String> channelArrayListNotAdded){ curUser.channelHidenNameList = channelArrayListNotAdded; }
+    public static void setChannelArrayListNotAdded(ArrayList<String> channelArrayListNotAdded){ curUser.channelHidenNameList = channelArrayListNotAdded;userPrint(); }
+
+    public static void changeUser(final String userName){
+        System.out.println("changeUser "+userName);
+        userPrint();
+        if(userName == ""){
+            return;
+        }
+        String str = null;
+        curUser.name = userName;
+        try {
+            for(News value: curUser.newsMap.values()){
+                if(value.getIsRead()){
+                    value.changeRead();
+                }
+                if(value.getIsFavorite()){
+                    value.changeFavorite();
+                }
+                if(value.getIsBlocked()){
+                    value.changeBlock();
+                }
+            }
+            str = fileUtilities.read(userName + ".txt");
+            System.out.println(str);
+            String[] Lists = str.split("\n");
+            curUser.historyList = new ArrayList<>();
+            String[] curList = null;
+            if(Lists.length > 0) {
+                System.out.println("0:"+Lists[0]);
+                curList =Lists[0].split(",");
+                for (int i = 1; i < curList.length; i++) {
+                    String newsID = curList[i];
+                    News temp = curUser.newsMap.get(newsID);
+                    if (temp == null) {
+                        temp = new News(fileUtilities.read(newsID + ".news"));
+                        curUser.newsMap.put(newsID, temp);
+                    }
+                    if (!temp.getIsRead()) {
+                        temp.changeRead();
+                    }
+                    curUser.historyList.add(temp);
+                }
+            }
+            curUser.favoriteList = new ArrayList<>();
+            if(Lists.length > 1){
+                System.out.println("1:"+Lists[1]);
+                curList = Lists[1].split(",");
+                for(int i = 1; i < curList.length; i++){
+                    String newsID = curList[i];
+                    News temp = curUser.newsMap.get(newsID);
+                    if(temp == null){
+                        temp = new News(fileUtilities.read(newsID + ".news"));
+                        curUser.newsMap.put(newsID, temp);
+                    }
+                    if(!temp.getIsFavorite()){
+                        temp.changeFavorite();
+                    }
+                    curUser.favoriteList.add(temp);
+                }
+            }
+            curUser.blockList = new ArrayList<>();
+            if(Lists.length>2) {
+                System.out.println("2:"+Lists[2]);
+                curList = Lists[2].split(",");
+                for (int i = 1; i < curList.length; i++) {
+                    String newsID = curList[i];
+                    News temp = curUser.newsMap.get(newsID);
+                    if (temp == null) {
+                        temp = new News(fileUtilities.read(newsID + ".news"));
+                        curUser.newsMap.put(newsID, temp);
+                    }
+                    if (!temp.getIsBlocked()) {
+                        temp.changeBlock();
+                    }
+                    curUser.blockList.add(temp);
+                }
+            }
+            System.out.println("Reach.");
+            curUser.searchHistory = new ArrayList<>();
+            curUser.channelNameList = new ArrayList<>();
+            curUser.channelHidenNameList = new ArrayList<>();
+            if(Lists.length>3) {
+                System.out.println("3:"+Lists[3]);
+                curList = Lists[3].split(",");
+                for (int i = 1; i < curList.length; i++) {
+                    curUser.searchHistory.add(new HistorySuggestion(curList[i]));
+                }
+                System.out.println("4:"+Lists[4]);
+                curList = Lists[4].split(",");
+                for (int i = 1; i < curList.length; i++) {
+                    curUser.channelNameList.add(curList[i]);
+                }
+                System.out.println("5:"+Lists[5]);
+                curList = Lists[5].split(",");
+                for (int i = 1; i < curList.length; i++) {
+                    curUser.channelHidenNameList.add(curList[i]);
+                }
+            } else {
+                curUser.channelNameList = new ArrayList<>(Arrays.asList("娱乐","军事","教育","文化","健康","财经","体育","汽车","科技","社会"));
+            }
+            System.out.println("length=" + curUser.channelNameList.size());
+        } catch(Exception e){
+            System.out.println(e);
+            curUser.historyList = new ArrayList<>();
+            curUser.favoriteList = new ArrayList<>();
+            curUser.blockList = new ArrayList<>();
+            curUser.searchHistory = new ArrayList<>();
+            curUser.channelNameList = new ArrayList<>(Arrays.asList("娱乐","军事","教育","文化","健康","财经","体育","汽车","科技","社会"));
+            curUser.channelHidenNameList = new ArrayList<>();
+        }
+        System.out.println("print");
+        userPrint();
+    }
+
+    public static void userPrint(){
+        StringBuilder sb = new StringBuilder();
+        ArrayList<News> curList = curUser.historyList;
+        sb.append("xxx");
+        for(int i = 0; i < curList.size(); i++){
+            sb.append(",");
+            sb.append(curList.get(i).getNewsID());
+        }
+        sb.append("\n");
+        sb.append("xxx");
+        curList = curUser.favoriteList;
+        for(int i = 0; i < curList.size(); i++){
+            sb.append(",");
+            sb.append(curList.get(i).getNewsID());
+        }
+        sb.append("\n");
+        sb.append("xxx");
+        curList = curUser.blockList;
+        for(int i = 0; i < curList.size(); i++){
+            sb.append(",");
+            sb.append(curList.get(i).getNewsID());
+        }
+        sb.append("\n");
+        sb.append("xxx");
+        ArrayList<HistorySuggestion> searchList = curUser.searchHistory;
+        for(int i = 0; i < searchList.size(); i++){
+            sb.append(",");
+            sb.append(searchList.get(i).getBody());
+        }
+        sb.append("\n");
+        sb.append("xxx");
+        ArrayList<String> strList = curUser.channelNameList;
+        for(int i = 0; i < strList.size(); i++){
+            sb.append(",");
+            sb.append(strList.get(i));
+        }
+        sb.append("\n");
+        sb.append("xxx");
+        strList = curUser.channelHidenNameList;
+        for(int i = 0; i < searchList.size(); i++){
+            sb.append(",");
+            sb.append(strList.get(i));
+        }
+        try {
+            fileUtilities.save(curUser.name + ".txt", sb.toString());
+        } catch(Exception e){
+
+        }
+    }
 
     public static ArrayList<News> reqNews(final String size, final String startDate, final String endDate, final String words, final String categories){
         ArrayList<News> ret = new ArrayList<>();
@@ -75,6 +238,11 @@ public class DataHelper {
                     ret.add(aNews);
                 } else {
                     ret.add(tNews);
+                    try{
+                        fileUtilities.save(tNews.getNewsID()+".news", tNews.toString());
+                    } catch(Exception e){
+
+                    }
                 }
             }
             System.out.println(ret.size());
@@ -91,7 +259,11 @@ public class DataHelper {
     public static ArrayList<News> getMoreNewsArrayList(String channel){ return curUser.loadMore(channel); }
 
     public static ArrayList<News> getFavoriteArrayList(){
-        return curUser.favoriteList;
+        ArrayList<News> ret = new ArrayList<>();
+        for(int i = 0; i < curUser.favoriteList.size(); i++){
+            ret.add(curUser.favoriteList.get(i));
+        }
+        return ret;
     }
 
     public static ArrayList<News> getHistoryArrayList(){
@@ -126,6 +298,7 @@ public class DataHelper {
             addToFavorite(temp);
         }
         temp.changeFavorite();
+        userPrint();
     }
 
     public static void addToBlock(News news){
@@ -150,6 +323,7 @@ public class DataHelper {
             addToBlock(temp);
         }
         temp.changeBlock();
+        userPrint();
     }
 
     public static void addToHistory(String newsID){
@@ -162,6 +336,7 @@ public class DataHelper {
         }
         curUser.historyList.add(temp);
         if(!temp.getIsRead()) temp.changeRead();
+        userPrint();
     }
 
     public static ArrayList<News> getRecommendArrayList(){
@@ -179,24 +354,39 @@ public class DataHelper {
             }
         }
         curUser.searchHistory.add(historySuggestion);
+        userPrint();
     }
 
     public static ArrayList<News> getSearchResultArrayList(String keyword){ return curUser.search(keyword); }
 
-    public static Boolean isLoggedIn(){
-        return true;
-    }
-    public static Boolean logOut(){
-        return false;
-    }
+
     public static Boolean logIn(String userName, String userPassword){
-        return true;
-    }
-    public static Boolean Register(String userName, String userPassword){
+        try{
+            String string = fileUtilities.read("users.txt");
+            String[] userNames = string.split("\n");
+            for(String item : userNames){
+                if(userName.equals(item) && userPassword.equals(item)) {
+                    changeUser(userName);
+                    return true;
+                }
+            }
+            return false;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return false;
     }
+
     public static String getUserName(){
-        return "清华大学";
+        return curUser.name;
+    }
+
+    public static void writeUserList(){
+        try{
+            String string = "userlzh\n";
+            string += "usermzx\n";
+            fileUtilities.save("users.txt", string);
+        }catch (Exception e) {System.out.println(e);}
     }
 
 }

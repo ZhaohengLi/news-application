@@ -53,10 +53,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         setUpStatusBar();
         init();
-        setUserInfo();
         setUpRecyclerView();//newsArrayList一开始是初始化好的空的list
         setUpTabLayout();
         DataHelper.fileUtilities = new FileUtilities(MainActivity.this);
+        DataHelper.writeUserList();
+        DataHelper.changeUser("");
+        setUserData();
     }
 
     private void init(){
@@ -81,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void setUserInfo(){
+    private void setUserData(){
         NavigationView navigationView = findViewById(R.id.nav_view);
         TextView userName = navigationView.getHeaderView(0).findViewById(R.id.text_view_user_name);
         userName.setText(DataHelper.getUserName());
@@ -201,7 +203,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (resultCode == RESULT_OK) setUpTabLayout();
                 break;
             case(REQUEST_FOR_LOGIN):
-                if (resultCode == RESULT_OK) setUpTabLayout();
+                if (resultCode == RESULT_OK) {
+                    setUpTabLayout();
+                    setUserData();
+                }
                 break;
         }
     }
