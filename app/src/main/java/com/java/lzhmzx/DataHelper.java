@@ -29,41 +29,17 @@ import java.net.*;
 public class DataHelper {
 
     public static FileUtilities fileUtilities;
-
-    public static ArrayList<String> getSampleChannelList(){
-        ArrayList<String> channelList = new ArrayList<>();
-        channelList.add("娱乐");
-        channelList.add("军事");
-        channelList.add("教育");
-        channelList.add("文化");
-        channelList.add("健康");
-        channelList.add("财经");
-        channelList.add("体育");
-        channelList.add("汽车");
-        channelList.add("科技");
-        channelList.add("社会");
-        return channelList;
-    }
-
-    public static ArrayList<String> getChannelArrayListAdded(){
-        return curUser.channelNameList;
-    }
-
-    public static ArrayList<String> getChannelArrayListNotAdded(){
-        return curUser.channelHidenNameList;
-    }
-
-    public static void setChannelArrayListAdded(ArrayList<String> channelArrayListAdded){
-        curUser.channelNameList = channelArrayListAdded;
-    }
-
-    public static void setChannelArrayListNotAdded(ArrayList<String> channelArrayListNotAdded){
-        curUser.channelHidenNameList = channelArrayListNotAdded;
-    }
-
     private static User curUser = new User();
 
-    //访问服务器并获得资源
+
+    public static ArrayList<String> getChannelArrayListAdded() { return curUser.channelNameList; }
+
+    public static ArrayList<String> getChannelArrayListNotAdded() { return curUser.channelHidenNameList; }
+
+    public static void setChannelArrayListAdded(ArrayList<String> channelArrayListAdded) { curUser.channelNameList = channelArrayListAdded;}
+
+    public static void setChannelArrayListNotAdded(ArrayList<String> channelArrayListNotAdded){ curUser.channelHidenNameList = channelArrayListNotAdded; }
+
     public static ArrayList<News> reqNews(final String size, final String startDate, final String endDate, final String words, final String categories){
         ArrayList<News> ret = new ArrayList<>();
         try {
@@ -104,6 +80,7 @@ public class DataHelper {
                             System.out.println(text);*/
                             /*fileUtilities.savePicture(tNews.getNewsID()+".news", fileUtilities.getPictureFromURL(tNews.imageUrl));
                             tNews.image = fileUtilities.readPicture(tNews.getNewsID()+".news");*/
+                            tNews.image = fileUtilities.getPictureFromURL(tNews.imageUrl);
                         } catch(Exception e){ }
                     }
                     ret.add(tNews);
@@ -117,25 +94,17 @@ public class DataHelper {
         return ret;
     }
 
+    public static ArrayList<News> getNewsArrayList(String channel){ return curUser.get(channel); }
 
-    public static ArrayList<News> getNewsArrayList(String channel){
-        return curUser.get(channel);
-    }   
+    public static ArrayList<News> getRefreshedNewsArrayList(String channel){ return curUser.refresh(channel); }
 
-    public static ArrayList<News> getRefreshedNewsArrayList(String channel){
-        return curUser.refresh(channel);
-    }
-
-    public static ArrayList<News> getMoreNewsArrayList(String channel){
-        return curUser.loadMore(channel);
-    }
+    public static ArrayList<News> getMoreNewsArrayList(String channel){ return curUser.loadMore(channel); }
 
     public static ArrayList<News> getFavoriteArrayList(){
         return curUser.favoriteList;
     }
 
     public static ArrayList<News> getHistoryArrayList(){
-        //传全局变量的引用
         ArrayList<News> ret = new ArrayList<>();
         for(int i = curUser.historyList.size()-1; i >= 0; i--){
             ret.add(curUser.historyList.get(i));
@@ -147,6 +116,7 @@ public class DataHelper {
         System.out.println("Add " + news.getNewsID());
         curUser.favoriteList.add(news);
     }
+
     public static void removeFromFavorite(News news){
         System.out.println("Remove " + news.getNewsID());
         String nID = news.getNewsID();
@@ -171,6 +141,7 @@ public class DataHelper {
     public static void addToBlock(News news){
         curUser.blockList.add(news);
     }
+
     public static void removeFromBlock(News news){
         String nID = news.getNewsID();
         for(int i = 0; i < curUser.blockList.size(); i++) {
@@ -207,18 +178,9 @@ public class DataHelper {
         return curUser.recommend();
     }
 
-    public static ArrayList<HistorySuggestion> getHistorySuggestionArrayList(){
-        /*ArrayList<HistorySuggestion> historySuggestionArrayList = new ArrayList<>();
-        historySuggestionArrayList.add(new HistorySuggestion("first"));
-        historySuggestionArrayList.add(new HistorySuggestion("second"));
-        historySuggestionArrayList.add(new HistorySuggestion("third"));
-        return historySuggestionArrayList;*/
-        return curUser.searchHistory;
-    }
+    public static ArrayList<HistorySuggestion> getHistorySuggestionArrayList(){ return curUser.searchHistory; }
 
     public static void addToHistorySuggestion(HistorySuggestion historySuggestion){
-        //检查之前是否存在 存在要删除
-        //新加入的历史记录放在末尾就好
         String body = historySuggestion.getBody();
         for(int i = 0; i < curUser.searchHistory.size(); i++) {
             if (curUser.searchHistory.get(i).getBody().equals(body)) {
@@ -229,9 +191,7 @@ public class DataHelper {
         curUser.searchHistory.add(historySuggestion);
     }
 
-    public static ArrayList<News> getSearchResultArrayList(String keyword){
-        return curUser.search(keyword);
-    }
+    public static ArrayList<News> getSearchResultArrayList(String keyword){ return curUser.search(keyword); }
 
     public static Boolean isLoggedIn(){
         return true;

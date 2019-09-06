@@ -92,5 +92,4 @@ public class User {
         recommendList = search(keywords);
         return recommendList;
     }
-
-};
+}

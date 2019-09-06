@@ -53,11 +53,23 @@ public class FileUtilities {
 
     public Bitmap getPictureFromURL(String imageURL){
         Bitmap bitmap = null;
+//        try {
+//            InputStream inputStream = new URL(imageURL).openStream();
+//            bitmap = BitmapFactory.decodeStream(inputStream);
+//            inputStream.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         try {
-            InputStream inputStream = new URL(imageURL).openStream();
-            bitmap = BitmapFactory.decodeStream(inputStream);
-            inputStream.close();
-        } catch (Exception e) {
+            URL url = new URL(imageURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(5000);
+            conn.setRequestMethod("GET");
+            if (conn.getResponseCode() == 200) {
+                InputStream inputStream = conn.getInputStream();
+                bitmap = BitmapFactory.decodeStream(inputStream);
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return bitmap;

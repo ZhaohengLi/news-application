@@ -60,6 +60,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
             newsViewHolder.newPicture.setImageBitmap(newsList.get(position).image);
         } else {
             newsViewHolder.newPicture.setImageResource(newsList.get(position).getPictureId());
+//            newsViewHolder.newPicture.setVisibility(View.GONE);
         }
         newsViewHolder.newsTitle.setText(newsList.get(position).getTitle());
         newsViewHolder.newsDescription.setText(newsList.get(position).getDescription());
@@ -97,11 +98,12 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_SUBJECT, "分享");
+                intent.setType("image/jpg");
+                intent.putExtra(Intent.EXTRA_SUBJECT, "分享新闻 \""+newsList.get(position).getTitle()+"\"");
                 intent.putExtra(Intent.EXTRA_TEXT, newsList.get(position).getDescription());
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(Intent.createChooser(intent, newsList.get(position).getTitle()));
+//                intent.putExtra(Intent.EXTRA_STREAM, )
+
+                context.startActivity(Intent.createChooser(intent,"新闻分享"));
             }
         });
     }

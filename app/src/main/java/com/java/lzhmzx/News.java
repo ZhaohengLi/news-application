@@ -3,7 +3,6 @@ import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.*;
 import org.json.JSONObject;
 
 public class News implements Parcelable {
@@ -20,16 +19,11 @@ public class News implements Parcelable {
     public String imageUrl;
     public Bitmap image;
 
-    public News(String title, String description, int pictureId, boolean isRead) {
-        this.title=title;
-        this.description=description;
-        this.pictureId=pictureId;
-        this.isRead=isRead;
-    }
+
     public News(JSONObject JsonNews)throws Exception {
         this.title = JsonNews.getString("title");
         description = JsonNews.getString("content");
-        this.pictureId = R.mipmap.news_one;
+        this.pictureId = R.mipmap.footer;
         this.isRead = false;
         this.isFavorite = false;
         this.isBlocked = false;
