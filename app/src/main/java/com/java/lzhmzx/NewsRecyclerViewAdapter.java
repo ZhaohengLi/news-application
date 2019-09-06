@@ -2,6 +2,7 @@ package com.java.lzhmzx;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerViewAdapter.NewsViewHolder> {
 
@@ -56,12 +66,35 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
 
     @Override
     public void onBindViewHolder(final NewsRecyclerViewAdapter.NewsViewHolder newsViewHolder, final int position){
-        if(newsList.get(position).image != null) {
-            newsViewHolder.newPicture.setImageBitmap(newsList.get(position).image);
-        } else {
-            newsViewHolder.newPicture.setImageResource(newsList.get(position).getPictureId());
-//            newsViewHolder.newPicture.setVisibility(View.GONE);
-        }
+        if(newsList.get(position).getImageUrl().length()>1) {
+            Observable.create(new ObservableOnSubscribe<Bitmap>() {
+                @Override
+                public void subscribe(ObservableEmitter<Bitmap> emitter) throws Exception {
+                    //通过设置此方法的回调运行在子线程中，可以进行网络请求等一些耗时的操作
+                    //比如请求网络拿到数据通过调用emitter.onNext(response);将请求的数据发送到下游
+                    emitter.onNext(FileUtilities.getPictureFromURL(newsList.get(position).getImageUrl()));
+                    emitter.onComplete();
+                }
+            }).subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<Bitmap>() {
+                        //通过设置Observer运行在主线程，拿到网络请求的数据进行解析使用
+                        @Override
+                        public void onSubscribe(Disposable d) {}
+                        @Override
+                        public void onNext(Bitmap b) {
+                            //在此接收上游异步获取的数据，比如网络请求过来的数据进行处理
+                            newsViewHolder.newPicture.setImageBitmap(b);
+                        }
+                        @Override
+                        public void onError(Throwable e) {}
+                        @Override
+                        public void onComplete() {}
+                    });
+        }else { newsViewHolder.newPicture.setImageResource(newsList.get(position).getPictureId()); }
+
+        /*if(newsList.get(position).getBitmap()!=null) newsViewHolder.newPicture.setImageBitmap(newsList.get(position).getBitmap());
+        if(newsList.get(position).getImageUrl().equals("")) newsViewHolder.newPicture.setImageResource(newsList.get(position).getPictureId());*/
         newsViewHolder.newsTitle.setText(newsList.get(position).getTitle());
         newsViewHolder.newsDescription.setText(newsList.get(position).getDescription());
         newsViewHolder.newsTime.setText(newsList.get(position).getTime());

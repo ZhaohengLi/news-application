@@ -65,24 +65,15 @@ public class DataHelper {
             System.out.println("return " + JsonStr.length() + " words");
             JSONObject newsJson = new JSONObject(new JSONTokener(JsonStr));
             JSONArray JsonNewsArray = newsJson.getJSONArray("data");
+
             for (int i = 0; i < JsonNewsArray.length(); i++) {
                 JSONObject JsonNews = JsonNewsArray.getJSONObject(i);
                 News tNews = new News(JsonNews);
-                //tNews.show();
+
                 News aNews = curUser.newsMap.get(tNews.getNewsID());
                 if(aNews != null){
                     ret.add(aNews);
                 } else {
-                    if(tNews.imageUrl.length() > 1) {
-                        try {
-                           /* fileUtilities.save(tNews.getNewsID()+".news", tNews.getTitle());
-                            String text = fileUtilities.read(tNews.getNewsID()+".news");
-                            System.out.println(text);*/
-                            /*fileUtilities.savePicture(tNews.getNewsID()+".news", fileUtilities.getPictureFromURL(tNews.imageUrl));
-                            tNews.image = fileUtilities.readPicture(tNews.getNewsID()+".news");*/
-                            tNews.image = fileUtilities.getPictureFromURL(tNews.imageUrl);
-                        } catch(Exception e){ }
-                    }
                     ret.add(tNews);
                 }
             }
@@ -90,7 +81,6 @@ public class DataHelper {
         }catch(Exception e){
             System.out.println(e);
         }
-
         return ret;
     }
 

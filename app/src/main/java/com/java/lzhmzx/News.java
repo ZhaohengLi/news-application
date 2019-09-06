@@ -16,8 +16,8 @@ public class News implements Parcelable {
     private String origin = "清华大学";
     private String newsID;
     public String keywords;
-    public String imageUrl;
-    public Bitmap image;
+    private String imageUrl;
+    private Bitmap bitmap;
 
 
     public News(JSONObject JsonNews)throws Exception {
@@ -37,7 +37,7 @@ public class News implements Parcelable {
         if(temp >= 0){
             this.imageUrl = this.imageUrl.substring(0, temp);
         }
-        image = null;
+        this.bitmap = null;
     }
     public News(){}
 
@@ -76,6 +76,18 @@ public class News implements Parcelable {
         return title;
     }
 
+    public Bitmap getBitmap(){
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap){
+        this.bitmap=bitmap;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
     public String getNewsID(){return this.newsID;}
 
     public boolean getIsRead() { return isRead; }
@@ -109,6 +121,7 @@ public class News implements Parcelable {
         parcel.writeString(time);
         parcel.writeString(origin);
         parcel.writeString(newsID);
+        parcel.writeString(imageUrl);
     }
 
     public static final Parcelable.Creator<News> CREATOR = new Creator<News>() {
@@ -123,6 +136,7 @@ public class News implements Parcelable {
             news.time = source.readString();
             news.origin = source.readString();
             news.newsID = source.readString();
+            news.imageUrl = source.readString();
             return news;
         }
         public News[] newArray(int size) {

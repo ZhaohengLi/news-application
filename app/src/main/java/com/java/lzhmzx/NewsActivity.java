@@ -1,6 +1,7 @@
 package com.java.lzhmzx;
 
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -15,6 +16,14 @@ import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class NewsActivity extends AppCompatActivity {
 
@@ -65,20 +74,63 @@ public class NewsActivity extends AppCompatActivity {
     }
 
     public void setUpNewsDetail(){
-        ImageView newsPicture = findViewById(R.id.news_picture);
+        final ImageView newsPicture = findViewById(R.id.news_picture);
         TextView newsTitle = findViewById(R.id.news_title);
-        TextView newsDescription = findViewById(R.id.news_description);
+        final TextView newsDescription = findViewById(R.id.news_description);
         TextView newsTime = findViewById(R.id.news_time);
         TextView newsOrigin = findViewById(R.id.news_origin);
         VideoView videoView = NewsActivity.this.findViewById(R.id.news_video);
 
-
-//        if(news.image != null) {
-//            newsPicture.setImageBitmap(news.image);
-//        } else {
+//        if (news.getImageUrl().equals("")) {
 //            newsPicture.setImageResource(news.getPictureId());
+//        }else {
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    System.out.println("begin to download");
+//                    final Bitmap bitmap = FileUtilities.getPictureFromURL(news.getImageUrl());
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            System.out.println("Set image");
+//                            newsPicture.setImageBitmap(bitmap);
+//                        }
+//                    });
+//                }
+//            }).start();
+////            newsPicture.setImageBitmap(FileUtilities.getPictureFromURL(news.getImageUrl()));
 //        }
-        newsPicture.setImageBitmap(news.image);
+
+
+
+        if(news.getImageUrl().length()>1) {
+            Observable.create(new ObservableOnSubscribe<Bitmap>() {
+                @Override
+                public void subscribe(ObservableEmitter<Bitmap> emitter) throws Exception {
+                    //通过设置此方法的回调运行在子线程中，可以进行网络请求等一些耗时的操作
+                    //比如请求网络拿到数据通过调用emitter.onNext(response);将请求的数据发送到下游
+                    emitter.onNext(FileUtilities.getPictureFromURL(news.getImageUrl()));
+                    emitter.onComplete();
+                }
+            }).subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<Bitmap>() {
+                        //通过设置Observer运行在主线程，拿到网络请求的数据进行解析使用
+                        @Override
+                        public void onSubscribe(Disposable d) {}
+                        @Override
+                        public void onNext(Bitmap b) {
+                            //在此接收上游异步获取的数据，比如网络请求过来的数据进行处理
+                            newsPicture.setImageBitmap(b);
+                        }
+                        @Override
+                        public void onError(Throwable e) {}
+                        @Override
+                        public void onComplete() {}
+                    });
+        }else { newsPicture.setImageResource(news.getPictureId()); }
+
+
         newsTitle.setText(news.getTitle());
         newsDescription.setText(news.getDescription());
         newsTime.setText("于 "+news.getTime());

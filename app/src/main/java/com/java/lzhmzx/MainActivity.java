@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }).start();
 
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(final TabLayout.Tab tab) {
