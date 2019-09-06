@@ -1,5 +1,6 @@
 package com.java.lzhmzx;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -130,7 +131,13 @@ public class NewsActivity extends AppCompatActivity {
         buttonShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("image/jpg");
+                intent.putExtra(Intent.EXTRA_SUBJECT, "分享新闻 \""+news.getTitle()+"\"");
+                intent.putExtra(Intent.EXTRA_TEXT, news.getDescription());
+//                intent.putExtra(Intent.EXTRA_STREAM, )
+
+                startActivity(Intent.createChooser(intent,"新闻分享"));
             }
         });
         buttonBlock.setOnClickListener(new View.OnClickListener() {
