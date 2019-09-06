@@ -93,8 +93,6 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
                     });
         }else { newsViewHolder.newPicture.setImageResource(newsList.get(position).getPictureId()); }
 
-        /*if(newsList.get(position).getBitmap()!=null) newsViewHolder.newPicture.setImageBitmap(newsList.get(position).getBitmap());
-        if(newsList.get(position).getImageUrl().equals("")) newsViewHolder.newPicture.setImageResource(newsList.get(position).getPictureId());*/
         newsViewHolder.newsTitle.setText(newsList.get(position).getTitle());
         newsViewHolder.newsDescription.setText(newsList.get(position).getDescription());
         newsViewHolder.newsTime.setText(newsList.get(position).getTime());

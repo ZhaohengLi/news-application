@@ -81,28 +81,6 @@ public class NewsActivity extends AppCompatActivity {
         TextView newsOrigin = findViewById(R.id.news_origin);
         VideoView videoView = NewsActivity.this.findViewById(R.id.news_video);
 
-//        if (news.getImageUrl().equals("")) {
-//            newsPicture.setImageResource(news.getPictureId());
-//        }else {
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    System.out.println("begin to download");
-//                    final Bitmap bitmap = FileUtilities.getPictureFromURL(news.getImageUrl());
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            System.out.println("Set image");
-//                            newsPicture.setImageBitmap(bitmap);
-//                        }
-//                    });
-//                }
-//            }).start();
-////            newsPicture.setImageBitmap(FileUtilities.getPictureFromURL(news.getImageUrl()));
-//        }
-
-
-
         if(news.getImageUrl().length()>1) {
             Observable.create(new ObservableOnSubscribe<Bitmap>() {
                 @Override
