@@ -2,6 +2,7 @@ package com.java.lzhmzx;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -25,6 +26,9 @@ import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -119,6 +123,7 @@ public class NewsActivity extends AppCompatActivity {
                         public void onNext(Bitmap b) {
                             //在此接收上游异步获取的数据，比如网络请求过来的数据进行处理
                             newsPicture.setImageBitmap(b);
+                            news.setBitmap(b);
                         }
                         @Override
                         public void onError(Throwable e) { }
@@ -142,15 +147,6 @@ public class NewsActivity extends AppCompatActivity {
         }else{
         videoView.setVisibility(View.GONE);
         }
-
-//        if (true){
-//            System.out.println("Prepare to load video.");
-//            videoView.setMediaController(new MediaController(this));
-//            videoView.setVideoURI(Uri.parse("https://key003.ku6.com/movie/1af61f05352547bc8468a40ba2d29a1d.mp4"));
-//            videoView.start();
-//            videoView.requestFocus();
-//        }
-
     }
 
     public void setUpButton(){
@@ -173,13 +169,19 @@ public class NewsActivity extends AppCompatActivity {
         buttonShare.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
+                if (news.getImageUrl().length() < 1){
+                    Snackbar.make(view, "这条新闻没有附带图片", Snackbar.LENGTH_SHORT).show();
+                    return true;
+                }
+                if (news.getBitmap()==null){
+                    Snackbar.make(view, "图片正在加载 请稍后再试", Snackbar.LENGTH_SHORT).show();
+                    return true;
+                }
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("image/*");
-                if(checkPermission(NewsActivity.this)){
-                    intent.putExtra(Intent.EXTRA_STREAM, getUri());
-                    startActivity(Intent.createChooser(intent,"新闻图片分享"));
-                }
-                return false;
+                intent.putExtra(Intent.EXTRA_STREAM, getUri());
+                startActivity(Intent.createChooser(intent,"新闻图片分享"));
+                return true;
             }
         });
         buttonBlock.setOnClickListener(new View.OnClickListener() {
@@ -222,10 +224,11 @@ public class NewsActivity extends AppCompatActivity {
         return true;
     }
 
-    private Uri getUri(){
-        Uri uri = null;
-        if(!checkPermission(NewsActivity.this))
-            uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), news.getBitmap(), null, null));
-        return uri;
+    private Uri getUri() {
+        if(checkPermission(NewsActivity.this)) {
+            Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), FileUtilities.readPicture(news.getNewsID()+".pic"), null,null));
+            return uri;
+        }
+        return null;
     }
 }

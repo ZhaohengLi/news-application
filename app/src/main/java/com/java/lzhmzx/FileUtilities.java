@@ -26,9 +26,9 @@ public class FileUtilities {
         }
 
     }
-    public static void savePicture(String fileName, Bitmap bitmap) throws Exception{
+    public static void savePicture(String fileName, Bitmap bitmap){
         try{
-            FileOutputStream fileOutputStream = mContext.openFileOutput(fileName, Context.MODE_PRIVATE);
+            FileOutputStream fileOutputStream = mContext.openFileOutput(fileName, Context.MODE_WORLD_READABLE);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100,fileOutputStream);
             fileOutputStream.close();
         }catch (Exception e){
