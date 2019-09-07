@@ -69,11 +69,11 @@ public class NewsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(news.getIsFavorite()){
-                    Snackbar.make(view, "已取消收藏此新闻！", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, "已取消收藏此新闻！", Snackbar.LENGTH_SHORT).show();
                     operateFavorite();
                     fabFavorite.setImageDrawable(getDrawable(R.drawable.ic_favorite_border));
                 }else{
-                    Snackbar.make(view, "已收藏此新闻！", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, "已收藏此新闻！", Snackbar.LENGTH_SHORT).show();
                     operateFavorite();
                     fabFavorite.setImageDrawable(getDrawable(R.drawable.ic_favorite));
                 }
@@ -186,11 +186,11 @@ public class NewsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(news.getIsBlocked()){
-                    Snackbar.make(view, "已取消屏蔽类似的新闻", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, "已取消屏蔽类似的新闻", Snackbar.LENGTH_SHORT).show();
                     operateBlock();
                     buttonBlock.setText("屏蔽类似的新闻");
                 }else{
-                    Snackbar.make(view, "感谢你的反馈 我们会减少类似新闻的出现", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, "感谢你的反馈 我们会减少类似新闻的出现", Snackbar.LENGTH_SHORT).show();
                     operateBlock();
                     buttonBlock.setText("已减少类似新闻的出现");
                 }

@@ -75,7 +75,8 @@
                     android:layout_below="@id/news_origin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp">
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp">
                     <Button
                         android:id="@+id/btn_share"
                         android:background="@color/transparent"

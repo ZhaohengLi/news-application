@@ -163,7 +163,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             public void run() {
                                 newsRecyclerViewAdapter.swapData(refreshedNewsArrayList);
                                 twinklingRefreshLayout.finishRefreshing();
-                                Snackbar.make(getWindow().getDecorView().findViewById(R.id.recycler_view), "已为你更新内容", Snackbar.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -181,7 +180,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             public void run() {
                                 newsRecyclerViewAdapter.swapData(moreNewsArrayList);
                                 twinklingRefreshLayout.finishLoadmore();
-                                Snackbar.make(getWindow().getDecorView().findViewById(R.id.recycler_view), "已为你加载更多内容", Snackbar.LENGTH_SHORT).show();
                             }
                         });
 
