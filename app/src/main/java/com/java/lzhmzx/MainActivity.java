@@ -53,12 +53,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         setUpStatusBar();
         init();
-        setUpRecyclerView();//newsArrayList一开始是初始化好的空的list
-        setUpTabLayout();
-        FileUtilities.mContext = MainActivity.this;
-        DataHelper.writeUserList();
         DataHelper.changeUser("");
         setUserData();
+
+        setUpRecyclerView();//newsArrayList一开始是初始化好的空的list
+        setUpTabLayout();
+        initTabLayoutData();
+
+        FileUtilities.mContext = MainActivity.this;
+        DataHelper.writeUserList();
     }
 
     private void init(){
@@ -86,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setUserData(){
         NavigationView navigationView = findViewById(R.id.nav_view);
         TextView userName = navigationView.getHeaderView(0).findViewById(R.id.text_view_user_name);
-        userName.setText("欢迎归来 "+DataHelper.getUserName());
+        userName.setText(DataHelper.getUserName());
     }
 
     private void setUpStatusBar(){
@@ -99,23 +102,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabLayout.removeAllTabs();
         for(String channel : channelArrayList){tabLayout.addTab(tabLayout.newTab().setText(channel));}
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                final ArrayList<News> tempNewsArrayList = DataHelper.getNewsArrayList(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString());
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        newsRecyclerViewAdapter.swapData(tempNewsArrayList);
-                    }
-                });
-            }
-        }).start();
-
-
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(final TabLayout.Tab tab) {
+                recyclerView.setVisibility(View.INVISIBLE);
                 Snackbar.make(getWindow().getDecorView().findViewById(R.id.recycler_view), "正在为您挑选内容 请稍后", Snackbar.LENGTH_LONG).show();
                 new Thread(new Runnable() {
                     @Override
@@ -125,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             @Override
                             public void run() {
                                 newsRecyclerViewAdapter.swapData(tempNewsArrayList);
+                                recyclerView.setVisibility(View.VISIBLE);
                                 Snackbar.make(getWindow().getDecorView().findViewById(R.id.recycler_view), "已为你更新内容", Snackbar.LENGTH_SHORT).show();
                             }
                         });
@@ -137,6 +128,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onTabReselected(TabLayout.Tab tab) {}
         });
 
+    }
+
+    private void initTabLayoutData(){
+        //tablaylout设置后不会自己点击触发listener 在这了里手动触发
+        recyclerView.setVisibility(View.INVISIBLE);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final ArrayList<News> tempNewsArrayList = DataHelper.getNewsArrayList(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        newsRecyclerViewAdapter.swapData(tempNewsArrayList);
+                        recyclerView.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        }).start();
     }
 
     public void setUpRecyclerView(){
