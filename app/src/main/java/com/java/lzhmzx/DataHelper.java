@@ -35,9 +35,21 @@ public class DataHelper {
 
     public static ArrayList<String> getChannelArrayListNotAdded() {return curUser.channelHidenNameList; }
 
-    public static void setChannelArrayListAdded(ArrayList<String> channelArrayListAdded) { curUser.channelNameList = channelArrayListAdded;userPrint();}
+    public static void setChannelArrayListAdded(ArrayList<String> channelArrayListAdded) {
+        curUser.channelNameList = new ArrayList<>();
+        for(int i = 0; i < channelArrayListAdded.size(); i++){
+            curUser.channelNameList.add(channelArrayListAdded.get(i));
+        }
+        userPrint();
+    }
 
-    public static void setChannelArrayListNotAdded(ArrayList<String> channelArrayListNotAdded){ curUser.channelHidenNameList = channelArrayListNotAdded;userPrint(); }
+    public static void setChannelArrayListNotAdded(ArrayList<String> channelArrayListNotAdded){
+        curUser.channelHidenNameList = new ArrayList<>();
+        for(int i = 0; i < channelArrayListNotAdded.size(); i++){
+            curUser.channelHidenNameList.add(channelArrayListNotAdded.get(i));
+        }
+        userPrint();
+    }
 
     public static void changeUser(final String userName){
         System.out.println("changeUser "+userName);
@@ -60,12 +72,11 @@ public class DataHelper {
                 }
             }
             str = FileUtilities.read(userName + ".txt");
-            System.out.println(str);
+            //System.out.println(str);
             String[] Lists = str.split("\n");
             curUser.historyList = new ArrayList<>();
             String[] curList = null;
             if(Lists.length > 0) {
-                System.out.println("0:"+Lists[0]);
                 curList =Lists[0].split(",");
                 for (int i = 1; i < curList.length; i++) {
                     String newsID = curList[i];
@@ -82,7 +93,6 @@ public class DataHelper {
             }
             curUser.favoriteList = new ArrayList<>();
             if(Lists.length > 1){
-                System.out.println("1:"+Lists[1]);
                 curList = Lists[1].split(",");
                 for(int i = 1; i < curList.length; i++){
                     String newsID = curList[i];
@@ -99,7 +109,6 @@ public class DataHelper {
             }
             curUser.blockList = new ArrayList<>();
             if(Lists.length>2) {
-                System.out.println("2:"+Lists[2]);
                 curList = Lists[2].split(",");
                 for (int i = 1; i < curList.length; i++) {
                     String newsID = curList[i];
@@ -114,22 +123,18 @@ public class DataHelper {
                     curUser.blockList.add(temp);
                 }
             }
-            System.out.println("Reach.");
             curUser.searchHistory = new ArrayList<>();
             curUser.channelNameList = new ArrayList<>();
             curUser.channelHidenNameList = new ArrayList<>();
             if(Lists.length>3) {
-                System.out.println("3:"+Lists[3]);
                 curList = Lists[3].split(",");
                 for (int i = 1; i < curList.length; i++) {
                     curUser.searchHistory.add(new HistorySuggestion(curList[i]));
                 }
-                System.out.println("4:"+Lists[4]);
                 curList = Lists[4].split(",");
                 for (int i = 1; i < curList.length; i++) {
                     curUser.channelNameList.add(curList[i]);
                 }
-                System.out.println("5:"+Lists[5]);
                 curList = Lists[5].split(",");
                 for (int i = 1; i < curList.length; i++) {
                     curUser.channelHidenNameList.add(curList[i]);
@@ -137,9 +142,7 @@ public class DataHelper {
             } else {
                 curUser.channelNameList = new ArrayList<>(Arrays.asList("娱乐","军事","教育","文化","健康","财经","体育","汽车","科技","社会"));
             }
-            System.out.println("length=" + curUser.channelNameList.size());
         } catch(Exception e){
-            System.out.println(e);
             curUser.historyList = new ArrayList<>();
             curUser.favoriteList = new ArrayList<>();
             curUser.blockList = new ArrayList<>();
@@ -147,7 +150,6 @@ public class DataHelper {
             curUser.channelNameList = new ArrayList<>(Arrays.asList("娱乐","军事","教育","文化","健康","财经","体育","汽车","科技","社会"));
             curUser.channelHidenNameList = new ArrayList<>();
         }
-        System.out.println("print");
         userPrint();
     }
 
@@ -190,7 +192,7 @@ public class DataHelper {
         sb.append("\n");
         sb.append("xxx");
         strList = curUser.channelHidenNameList;
-        for(int i = 0; i < searchList.size(); i++){
+        for(int i = 0; i < strList.size(); i++){
             sb.append(",");
             sb.append(strList.get(i));
         }
@@ -210,10 +212,8 @@ public class DataHelper {
             request_url += "&endDate=" + endDate;
             request_url += "&words=" + words;
             request_url += "&categories=" + categories;
-            System.out.println(request_url);
             URL url = new URL(request_url);
             InputStreamReader isr = new InputStreamReader(url.openStream(), "UTF-8");
-            System.out.println("reached.");
             BufferedReader input = new BufferedReader(isr);
             StringBuilder result = new StringBuilder();
             String inputLine;
@@ -223,7 +223,7 @@ public class DataHelper {
             input.close();
 
             String JsonStr = result.toString();
-            System.out.println("return " + JsonStr.length() + " words");
+            //System.out.println("return " + JsonStr.length() + " words");
             JSONObject newsJson = new JSONObject(new JSONTokener(JsonStr));
             JSONArray JsonNewsArray = newsJson.getJSONArray("data");
 
@@ -243,9 +243,9 @@ public class DataHelper {
                     }
                 }
             }
-            System.out.println(ret.size());
+            //System.out.println(ret.size());
         }catch(Exception e){
-            System.out.println(e);
+            //System.out.println(e);
         }
         return ret;
     }
@@ -273,12 +273,12 @@ public class DataHelper {
     }
 
     public static void addToFavorite(News news){
-        System.out.println("Add " + news.getNewsID());
+        //System.out.println("Add " + news.getNewsID());
         curUser.favoriteList.add(news);
     }
 
     public static void removeFromFavorite(News news){
-        System.out.println("Remove " + news.getNewsID());
+        //System.out.println("Remove " + news.getNewsID());
         String nID = news.getNewsID();
         for(int i = 0; i < curUser.favoriteList.size(); i++) {
             if (curUser.favoriteList.get(i).getNewsID().equals(nID)) {
@@ -358,18 +358,33 @@ public class DataHelper {
     public static ArrayList<News> getSearchResultArrayList(String keyword){ return curUser.search(keyword); }
 
 
-    public static Boolean logIn(String userName, String userPassword){
+    public static int logIn(String userName, String userPassword){
         try{
             String string = FileUtilities.read("user.list");
             String[] userNames = string.split("\n");
             for(String item : userNames){
-                if(userName.equals(item) && userPassword.equals(item)) {
-                    changeUser(userName);
-                    return true;
+                if(userName.equals(item)) {
+                    if (userPassword.equals(item)){
+                    changeUser(userName);return 0;
+                    }else{
+                        return 1;
+                    }
                 }
             }
         }catch (Exception e){
-            System.out.println("From LogIn "+e);
+            //System.out.println("From LogIn "+e);
+        }
+        return 2;
+    }
+
+    public static Boolean register(String userName){
+        try{
+            String string = FileUtilities.read("user.list");
+            string += userName+"\n";
+            FileUtilities.save("user.list", string);
+            return true;
+        }catch (Exception e){
+            //System.out.println("From Register "+e);
         }
         return false;
     }
@@ -378,9 +393,9 @@ public class DataHelper {
 
     public static void writeUserList(){
         try{
-            String string = "ZhaohengLi\n";
-            string += "ZixuanMin\n";
-            string += "ShikunChen";
+            String string = "lzh\n";
+            string += "mzx\n";
+            string += "ssk\n";
             FileUtilities.save("user.list", string);
         }catch (Exception e) {System.out.println("From writeUserList "+e);}
     }

@@ -1,17 +1,24 @@
 package com.java.lzhmzx;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -107,26 +114,18 @@ public class NewsActivity extends AppCompatActivity {
                     .subscribe(new Observer<Bitmap>() {
                         //通过设置Observer运行在主线程，拿到网络请求的数据进行解析使用
                         @Override
-                        public void onSubscribe(Disposable d) {
-                        }
-
+                        public void onSubscribe(Disposable d) { }
                         @Override
                         public void onNext(Bitmap b) {
                             //在此接收上游异步获取的数据，比如网络请求过来的数据进行处理
                             newsPicture.setImageBitmap(b);
                         }
-
                         @Override
-                        public void onError(Throwable e) {
-                        }
-
+                        public void onError(Throwable e) { }
                         @Override
-                        public void onComplete() {
-                        }
+                        public void onComplete() { }
                     });
-        } else {
-            newsPicture.setImageResource(news.getPictureId());
-        }
+        } else { newsPicture.setImageResource(news.getPictureId()); }
 
 
         newsTitle.setText(news.getTitle());
@@ -134,23 +133,23 @@ public class NewsActivity extends AppCompatActivity {
         newsTime.setText("于 " + news.getTime());
         newsOrigin.setText("来自 " + news.getOrigin() + " 的报道");
 
-//        if (news.getVideoUrl().length()>1){
-//            System.out.println("Prepare to load video.");
-//            videoView.setMediaController(new MediaController(this));
-//            videoView.setVideoURI(Uri.parse(news.getVideoUrl()));
-//            videoView.start();
-//            videoView.requestFocus();
-//        }else{
-//        videoView.setVisibility(View.GONE);
-//        }
-
-        if (true){
+        if (news.getVideoUrl().length()>1){
             System.out.println("Prepare to load video.");
             videoView.setMediaController(new MediaController(this));
-            videoView.setVideoURI(Uri.parse("https://key003.ku6.com/movie/1af61f05352547bc8468a40ba2d29a1d.mp4"));
+            videoView.setVideoURI(Uri.parse(news.getVideoUrl()));
             videoView.start();
             videoView.requestFocus();
+        }else{
+        videoView.setVisibility(View.GONE);
         }
+
+//        if (true){
+//            System.out.println("Prepare to load video.");
+//            videoView.setMediaController(new MediaController(this));
+//            videoView.setVideoURI(Uri.parse("https://key003.ku6.com/movie/1af61f05352547bc8468a40ba2d29a1d.mp4"));
+//            videoView.start();
+//            videoView.requestFocus();
+//        }
 
     }
 
@@ -158,31 +157,42 @@ public class NewsActivity extends AppCompatActivity {
         final Button buttonShare = findViewById(R.id.btn_share);
         final Button buttonBlock = findViewById(R.id.btn_block);
 
-        if(news.getIsBlocked()) buttonBlock.setText("已屏蔽类似的新闻");
+        if(news.getIsBlocked()) buttonBlock.setText("已减少类似新闻的出现");
         else buttonBlock.setText("屏蔽类似的新闻");
 
         buttonShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("image/*");
+                intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_SUBJECT, "分享新闻 \""+news.getTitle()+"\"");
                 intent.putExtra(Intent.EXTRA_TEXT, news.getDescription());
-                intent.putExtra(Intent.EXTRA_STREAM, FileUtilities.readPicture(news.getNewsID()+".pic"));
                 startActivity(Intent.createChooser(intent,"新闻分享"));
+            }
+        });
+        buttonShare.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("image/*");
+                if(checkPermission(NewsActivity.this)){
+                    intent.putExtra(Intent.EXTRA_STREAM, getUri());
+                    startActivity(Intent.createChooser(intent,"新闻图片分享"));
+                }
+                return false;
             }
         });
         buttonBlock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(news.getIsBlocked()){
-                    Snackbar.make(view, "已取消屏蔽类似的新闻！", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, "已取消屏蔽类似的新闻", Snackbar.LENGTH_LONG).show();
                     operateBlock();
                     buttonBlock.setText("屏蔽类似的新闻");
                 }else{
-                    Snackbar.make(view, "已屏蔽类似的新闻！", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, "感谢你的反馈 我们会减少类似新闻的出现", Snackbar.LENGTH_LONG).show();
                     operateBlock();
-                    buttonBlock.setText("已屏蔽类似的新闻");
+                    buttonBlock.setText("已减少类似新闻的出现");
                 }
             }
         });
@@ -196,5 +206,26 @@ public class NewsActivity extends AppCompatActivity {
     public void operateBlock(){
         DataHelper.changeBlock(news.getNewsID());
         news.changeBlock();
+    }
+
+    private static boolean checkPermission(Activity context) {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                String[] mPermissionList = new String[]{
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE};
+                ActivityCompat.requestPermissions(context, mPermissionList, 1);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private Uri getUri(){
+        Uri uri = null;
+        if(!checkPermission(NewsActivity.this))
+            uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), news.getBitmap(), null, null));
+        return uri;
     }
 }

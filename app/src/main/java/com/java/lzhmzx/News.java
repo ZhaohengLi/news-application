@@ -31,7 +31,11 @@ public class News implements Parcelable {
         this.time = JsonNews.getString("publishTime");
         this.origin = JsonNews.getString("publisher");
         this.newsID = JsonNews.getString("newsID");
-        this.keywords = JsonNews.getJSONArray("keywords").getJSONObject(0).getString("word");
+        if (JsonNews.getJSONArray("keywords").length() == 0) {
+            this.keywords = "";
+        } else {
+            this.keywords = JsonNews.getJSONArray("keywords").getJSONObject(0).getString("word");
+        }
         this.imageUrl = JsonNews.getString("image");
         this.imageUrl = this.imageUrl.substring(1, this.imageUrl.length()-1);
         this.videoUrl = JsonNews.getString("video");

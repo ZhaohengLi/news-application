@@ -25,7 +25,6 @@ public class Channel {
 
     public ArrayList<News> refresh(Map<String, News> newsMap){
         displayNews = new ArrayList<>();
-        System.out.println("refresh " + this.name);
         savedNews = DataHelper.reqNews("","","2019-9-6","",this.name);
         displayIndex = savedNews.size() - 1;
         for(int i = 0; i < savedNews.size(); i++){
@@ -37,12 +36,10 @@ public class Channel {
             displayNews.add(savedNews.get(displayIndex));
             displayIndex--;
         }
-        System.out.println("refresh() return");
         return displayNews;
     }
 
     public ArrayList<News> get(Map<String, News> newsMap){
-        System.out.println("get " + this.name);
         if(savedNews.size() == 0){
             return refresh(newsMap);
         } else {
@@ -51,7 +48,6 @@ public class Channel {
     }
 
     public ArrayList<News> loadMore(){
-        System.out.println("loadMore " + this.name);
         for(int i = 0; i < deltaSize && displayIndex >= 0; i++){
             displayNews.add(savedNews.get(displayIndex));
             displayIndex--;

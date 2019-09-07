@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -134,15 +136,13 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
                 context.startActivity(intent);
             }
         });
-
         newsViewHolder.share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("image/jpg");
+                intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_SUBJECT, "分享新闻 \""+newsList.get(position).getTitle()+"\"");
                 intent.putExtra(Intent.EXTRA_TEXT, newsList.get(position).getDescription());
-                intent.putExtra(Intent.EXTRA_STREAM, FileUtilities.readPicture(newsList.get(position).getNewsID()+".pic"));
                 context.startActivity(Intent.createChooser(intent,"新闻分享"));
             }
         });

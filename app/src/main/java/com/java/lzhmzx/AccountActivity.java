@@ -44,14 +44,8 @@ public class AccountActivity extends AppCompatActivity {
 
                 String userNameString = userName.getText().toString();
                 String userPasswordString = userPassword.getText().toString();
-                Boolean succeed = DataHelper.logIn(userNameString, userPasswordString);
+                processLog(userNameString, userPasswordString);
 
-                if (succeed) {
-                    Intent intent = new Intent(AccountActivity.this, MainActivity.class);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
-                else Snackbar.make(view, "操作失败", Snackbar.LENGTH_LONG).show();
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -63,5 +57,37 @@ public class AccountActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void processLog(final String userNameString, String userPasswordString){
+        int logInStatus = DataHelper.logIn(userNameString, userPasswordString);
+        switch (logInStatus){
+            case 0:
+                Intent intent = new Intent(AccountActivity.this, MainActivity.class);
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+            case 1:
+                Snackbar.make(getWindow().getDecorView().findViewById(R.id.edit_text_user_password), "密码错误", Snackbar.LENGTH_LONG).show();
+                break;
+            case 2:
+                Snackbar.make(getWindow().getDecorView().findViewById(R.id.edit_text_user_password), "用户名不存在 是否建立新的账户", Snackbar.LENGTH_LONG)
+                        .setAction("是的", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Boolean registerStatus = DataHelper.register(userNameString);
+                                if (registerStatus){
+                                    DataHelper.changeUser(userNameString);
+                                    Snackbar.make(getWindow().getDecorView().findViewById(R.id.edit_text_user_password), "注册成功 已为您登录", Snackbar.LENGTH_LONG).show();
+                                    Intent intent = new Intent(AccountActivity.this, MainActivity.class);
+                                    setResult(RESULT_OK, intent);
+                                    finish();
+                                }else{
+                                    Snackbar.make(getWindow().getDecorView().findViewById(R.id.edit_text_user_password), "操作失败", Snackbar.LENGTH_LONG).show();
+                                }
+                            }
+                        }).show();
+                break;
+        }
     }
 }

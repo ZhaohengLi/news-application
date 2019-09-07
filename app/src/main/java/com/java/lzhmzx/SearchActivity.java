@@ -64,7 +64,7 @@ public class SearchActivity extends AppCompatActivity {
             public void onSearchAction(String query) {
                 lastQuery = query;
                 mSearchView.clearFocus();
-                Search("智慧之光如何闪耀海洋");
+                Search(query);
             }
         });
         mSearchView.setOnFocusChangeListener(new FloatingSearchView.OnFocusChangeListener() {

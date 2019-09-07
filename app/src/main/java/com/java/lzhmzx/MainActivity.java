@@ -99,7 +99,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabLayout.removeAllTabs();
         for(String channel : channelArrayList){tabLayout.addTab(tabLayout.newTab().setText(channel));}
 
-        Snackbar.make(getWindow().getDecorView().findViewById(R.id.recycler_view), "正在为你挑选内容 请稍后", Snackbar.LENGTH_LONG).show();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -108,8 +107,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void run() {
                         newsRecyclerViewAdapter.swapData(tempNewsArrayList);
-                        Snackbar.make(getWindow().getDecorView().findViewById(R.id.recycler_view), "已为你更新内容", Snackbar.LENGTH_SHORT).show();
-
                     }
                 });
             }
@@ -243,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             } else if(mode == Configuration.UI_MODE_NIGHT_NO) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             }
-            recreate();
+            changeNightMode();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -271,5 +268,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void changeNightMode(){
+        Intent intent = new Intent(MainActivity.this, MainActivity.class);
+        intent.putExtra("RESTART_BY_MODE", true);
+        MainActivity.this.startActivity(intent);
+        overridePendingTransition(R.anim.in_anim, R.anim.out_anim);
+        MainActivity.this.finish();
     }
 }
