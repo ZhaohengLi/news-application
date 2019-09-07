@@ -75,7 +75,7 @@ public class NewsActivity extends AppCompatActivity {
 
     }
 
-    public void setUpNewsDetail(){
+    public void setUpNewsDetail() {
         final ImageView newsPicture = findViewById(R.id.news_picture);
         TextView newsTitle = findViewById(R.id.news_title);
         final TextView newsDescription = findViewById(R.id.news_description);
@@ -83,21 +83,21 @@ public class NewsActivity extends AppCompatActivity {
         TextView newsOrigin = findViewById(R.id.news_origin);
         VideoView videoView = NewsActivity.this.findViewById(R.id.news_video);
 
-        if(news.getImageUrl().length()>1) {
+        if (news.getImageUrl().length() > 1) {
             Observable.create(new ObservableOnSubscribe<Bitmap>() {
                 @Override
                 public void subscribe(ObservableEmitter<Bitmap> emitter) throws Exception {
                     //通过设置此方法的回调运行在子线程中，可以进行网络请求等一些耗时的操作
                     //比如请求网络拿到数据通过调用emitter.onNext(response);将请求的数据发送到下游
-                    Bitmap bitmap = FileUtilities.readPicture(news.getNewsID()+".pic");
-                    if (bitmap!=null){
+                    Bitmap bitmap = FileUtilities.readPicture(news.getNewsID() + ".pic");
+                    if (bitmap != null) {
                         System.out.println("In NewsActivity get pic from file.");
                         emitter.onNext(bitmap);
                         emitter.onComplete();
-                    }else{
+                    } else {
                         bitmap = FileUtilities.getPictureFromURL(news.getImageUrl());
                         System.out.println("In NewsActivity get pic from internet.");
-                        FileUtilities.savePicture(news.getNewsID()+".pic",bitmap);
+                        FileUtilities.savePicture(news.getNewsID() + ".pic", bitmap);
                         emitter.onNext(bitmap);
                         emitter.onComplete();
                     }
@@ -107,29 +107,47 @@ public class NewsActivity extends AppCompatActivity {
                     .subscribe(new Observer<Bitmap>() {
                         //通过设置Observer运行在主线程，拿到网络请求的数据进行解析使用
                         @Override
-                        public void onSubscribe(Disposable d) {}
+                        public void onSubscribe(Disposable d) {
+                        }
+
                         @Override
                         public void onNext(Bitmap b) {
                             //在此接收上游异步获取的数据，比如网络请求过来的数据进行处理
                             newsPicture.setImageBitmap(b);
                         }
+
                         @Override
-                        public void onError(Throwable e) {}
+                        public void onError(Throwable e) {
+                        }
+
                         @Override
-                        public void onComplete() {}
+                        public void onComplete() {
+                        }
                     });
-        }else { newsPicture.setImageResource(news.getPictureId()); }
+        } else {
+            newsPicture.setImageResource(news.getPictureId());
+        }
 
 
         newsTitle.setText(news.getTitle());
         newsDescription.setText(news.getDescription());
-        newsTime.setText("于 "+news.getTime());
-        newsOrigin.setText("来自 "+news.getOrigin()+" 的报道");
+        newsTime.setText("于 " + news.getTime());
+        newsOrigin.setText("来自 " + news.getOrigin() + " 的报道");
 
-        if (news.getVideoUrl().length()>1){
+//        if (news.getVideoUrl().length()>1){
+//            System.out.println("Prepare to load video.");
+//            videoView.setMediaController(new MediaController(this));
+//            videoView.setVideoURI(Uri.parse(news.getVideoUrl()));
+//            videoView.start();
+//            videoView.requestFocus();
+//        }else{
+//        videoView.setVisibility(View.GONE);
+//        }
+
+        if (true){
             System.out.println("Prepare to load video.");
             videoView.setMediaController(new MediaController(this));
-            videoView.setVideoURI(Uri.parse(news.getVideoUrl()));
+            videoView.setVideoURI(Uri.parse("https://key003.ku6.com/movie/1af61f05352547bc8468a40ba2d29a1d.mp4"));
             videoView.start();
             videoView.requestFocus();
         }
